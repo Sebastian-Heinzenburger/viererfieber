@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lobby</title>
+  </head>
+  <body>
+
+    <div>
+        <input type="text" id="name" placeholder="name">
+        <button onclick="readyForGame()">bereit</button>
+    </div>
+    <script>
+      function readyForGame() {
+        //namen auslesen
+        const nameInput = document.querySelector("#name");
+        nameInput.setAttribute("disabled", "disabled");
+
+        console.debug(nameInput.value);
+      }
+    </script>
+  </body>
+</html>
