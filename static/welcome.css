@@ -61,6 +61,10 @@ input[type=number] {
 
 #join_game_dialog{
     font-weight: normal;
+    background-color: rgb(172, 232, 229);
+    border-radius: 1em;
+    margin-top: 2.5em;
+    box-shadow: 1em 1em 0.7em rgb(5, 50, 48);
 }
 
 .code_digit{
