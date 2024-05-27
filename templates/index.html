@@ -13,21 +13,31 @@
       }
 
       function joinGame() {
-        document.querySelector("#joinGame").setAttribute("open", "open");
+        document.querySelector("#join_game_dialog").setAttribute("open", "open");
       }
 
-      function focusInput(next) {
-        document.querySelector(next).focus();
+      function focusInput(actual, next) {
+        if(/[^0-9]/g.test(actual.value)){
+          actual.value=actual.value.replace(/[^0-9]/g,'');
+        }
+        else{
+          document.querySelector(next).focus();
+        }
       }
 
       function closeDialog() {
-        document.querySelector("#joinGame").close()
+        document.querySelector("#join_game_dialog").close()
       }
 
-      function submitDialog(params) {
-        const dialogForm = document.querySelector('#lobbyForm');
-        if (dialogForm.checkValidity())
-          dialogForm.submit()
+      function submitDialog(actual) {
+        if(/[^0-9]/g.test(actual.value)){
+          actual.value=actual.value.replace(/[^0-9]/g,'');
+        }
+          else{
+          const dialogForm = document.querySelector('#lobbyForm');
+          if (dialogForm.checkValidity())
+            dialogForm.submit()
+        }
       }
     </script>
 
@@ -37,39 +47,57 @@
       <input type="button" class="start_buttons" onclick="joinGame()" id="join_game" value="Spiel beitreten">
     </section>
 
-    <dialog id="joinGame">
-      <p>Join a Lobby</p>
+    <dialog id="join_game_dialog">
+      <p>Lobby Code:</p>
       <form method="post" action="lobby.html" id="lobbyForm">
         <input
-          type="number"
+          class="code_digit"
+          type="text"
+          inputtype="numeric"
+          maxlength="1"
           name="num0"
           id="num0"
           autocomplete="off"
-          oninput="focusInput('#num1')"
+          oninput="focusInput(this,'#num1')"
           autofocus
         />
         <input
-          type="number"
+          class="code_digit"
+          type="text"
+          inputtype="numeric"
+          maxlength="1"
           name="num1"
           id="num1"
+          min="0"
+          max="9"
           autocomplete="off"
-          oninput="focusInput('#num2')"
+          oninput="focusInput(this,'#num2')"
         />
         <input
-          type="number"
+          class="code_digit"
+          type="text"
+          inputtype="numeric"
+          maxlength="1"
           name="num2"
           id="num2"
+          min="0"
+          max="9"
           autocomplete="off"
-          oninput="focusInput('#num3')"
+          oninput="focusInput(this,'#num3')"
         />
         <input
-          type="number"
+          class="code_digit"
+          type="text"
+          inputtype="numeric"
+          maxlength="1"
           name="num3"
           id="num3"
+          min="0"
+          max="9"
           autocomplete="off"
-          oninput="submitDialog()"
+          oninput="submitDialog(this)"
         />
-        <button type="button" onclick="closeDialog()">close</button>
+        <button type="button" onclick="closeDialog()">Schließen</button>
         <input type="submit" />
       </form>
     </dialog>

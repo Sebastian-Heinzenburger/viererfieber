@@ -46,3 +46,23 @@ body {
     border-radius: 0.5em;
     box-shadow: 0.1em 0.1em 5px rgb(14, 84, 81);
 }
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+#join_game_dialog{
+    font-weight: normal;
+}
+
+.code_digit{
+    max-width: 1em;
+}
