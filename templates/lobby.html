@@ -11,6 +11,7 @@
         <input type="text" id="name" placeholder="name">
         <button onclick="readyForGame()">bereit</button>
     </div>
+    <table id="table"></table>
     <script>
       function readyForGame() {
         //namen auslesen
@@ -18,6 +19,16 @@
         nameInput.setAttribute("disabled", "disabled");
 
         console.debug(nameInput.value);
+      }
+      function createTable(){
+        table = document.querySelector("#table");
+        for (let i = 0; i < 6; i++) {
+          const tr = table.insertRow();
+          for (let j = 0; j < 7; j++) {
+            const td = tr.insertCell();
+            td.setAttribute("onclick","clickCell("+i+")");
+          }
+        }
       }
     </script>
   </body>
