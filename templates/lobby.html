@@ -9,7 +9,7 @@
         <div class="character" id="own_character">
             <input type="text" value="AnonymesZebra">
             <div>
-                <input type="checkbox" name="ready">
+                <input type="checkbox" id="ready">
                 <label for="ready">Bereit!</label><br>
             </div>
         </div>
@@ -17,25 +17,27 @@
         <div class="character" id="opponent_character">
             <label>Warte auf Gegner...</label>
         </div>
-    </body>
+
+
     <script>
-      function readyForGame() {
-
-        //namen auslesen
-        const nameInput = document.querySelector("#name");
-        nameInput.setAttribute("disabled", "disabled");
-
-        console.debug(nameInput.value);
-      }
-      function createTable(){
-        table = document.querySelector("#board");
-        for (let i = 0; i < 6; i++) {
-          const tr = table.insertRow();
-          for (let j = 0; j < 7; j++) {
-            const td = tr.insertCell();
-            td.setAttribute("onclick","clickCell("+i+")");
+        function readyForGame() {
+  
+          //namen auslesen
+          const nameInput = document.querySelector("#name");
+          nameInput.setAttribute("disabled", "disabled");
+  
+          console.debug(nameInput.value);
+        }
+        function createTable(){
+          table = document.querySelector("#board");
+          for (let i = 0; i < 6; i++) {
+            const tr = table.insertRow();
+            for (let j = 0; j < 7; j++) {
+              const td = tr.insertCell();
+              td.setAttribute("onclick","clickCell("+i+")");
+            }
           }
         }
-      }
-    </script>
+      </script>
+    </body>
 </html>
