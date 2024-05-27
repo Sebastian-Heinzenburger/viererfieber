@@ -8,7 +8,9 @@
   </head>
   <body>
     <script>
-      function createGame() {}
+      function createGame() {
+        document.location.href = "/lobby";
+      }
 
       function joinGame() {
         document.querySelector("#joinGame").setAttribute("open", "open");
@@ -20,6 +22,12 @@
 
       function closeDialog() {
         document.querySelector("#joinGame").close()
+      }
+
+      function submitDialog(params) {
+        const dialogForm = document.querySelector('#lobbyForm');
+        if (dialogForm.checkValidity())
+          dialogForm.submit()
       }
     </script>
 
@@ -60,11 +68,12 @@
           name="num3"
           id="num3"
           autocomplete="off"
-          oninput="document.querySelector('#lobbyForm').submit()"
+          oninput="submitDialog()"
         />
         <button type="button" onclick="closeDialog()">close</button>
         <input type="submit" />
       </form>
     </dialog>
+
   </body>
 </html>

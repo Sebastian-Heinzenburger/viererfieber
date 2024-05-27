@@ -9,11 +9,13 @@
 
     <div>
         <input type="text" id="name" placeholder="name">
+        <div></div>
         <button onclick="readyForGame()">bereit</button>
     </div>
     <table id="table"></table>
     <script>
       function readyForGame() {
+
         //namen auslesen
         const nameInput = document.querySelector("#name");
         nameInput.setAttribute("disabled", "disabled");
