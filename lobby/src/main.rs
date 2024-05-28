@@ -1,21 +1,31 @@
+fn main()->(){
+
+}
+
 struct Lobby {
     turn: i8,
     field: [[i8; 7]; 6],
-    end: bool
+    end: bool,
+    lobby_code: i8,
+    name_player1: String,
+    name_player2: String,
+    sid_player1: String,
+    sid_player2: String,
+    socket: String //später socket objekt?
 }
 
 impl Lobby {
-    fn new() -> Self{
+    fn new(lobby_code:i8, sid_player1: String, socket: String) -> Self{
         return Lobby{
             turn: 1,
             field: [[0i8; 7]; 6],
             end: false,
-            lobby_code: i8,
-            name_player1: String,
-            name_player2: String,
-            sid_player1: String,
-            sid_player2: String,
-            socket: String //später socket objekt?
+            lobby_code: lobby_code,
+            name_player1: String::from("WeinendesWürmchen"),
+            name_player2: String::from("SchüchterneSchnecke"),
+            sid_player1: sid_player1,
+            sid_player2: String::from(""),
+            socket: socket            
         }
     }
 
@@ -92,7 +102,7 @@ mod tests {
     use crate::Lobby;
     #[test]
     fn horizontal1(){
-        let mut lobby = Lobby:: new();
+        let mut lobby = Lobby:: new(1,String::from(""),String::from(""));
         lobby.drop(0);
         lobby.drop(0);
         lobby.drop(1);
@@ -105,7 +115,7 @@ mod tests {
     }
     #[test]
     fn vertical1(){
-        let mut lobby = Lobby:: new();
+        let mut lobby = Lobby:: new(1,String::from(""),String::from(""));
         lobby.drop(0);
         lobby.drop(1);
         lobby.drop(0);
@@ -118,7 +128,7 @@ mod tests {
     }
     #[test]
     fn horizontal2(){
-        let mut lobby = Lobby:: new();
+        let mut lobby = Lobby:: new(1,String::from(""),String::from(""));
         lobby.drop(2);
         lobby.drop(3);
         lobby.drop(3);
@@ -132,7 +142,7 @@ mod tests {
     }
     #[test]
     fn vertical2(){
-        let mut lobby = Lobby:: new();
+        let mut lobby = Lobby:: new(1,String::from(""),String::from(""));
         lobby.drop(6);
         lobby.drop(5);
         lobby.drop(5);
@@ -149,7 +159,7 @@ mod tests {
     }
     #[test]
     fn diagonal_right(){
-        let mut lobby = Lobby:: new();
+        let mut lobby = Lobby:: new(1,String::from(""),String::from(""));
         lobby.drop(1);
         lobby.drop(2);
         lobby.drop(2);
@@ -166,7 +176,7 @@ mod tests {
     }
     #[test]
     fn diagonal_left(){
-        let mut lobby = Lobby:: new();
+        let mut lobby = Lobby:: new(1,String::from(""),String::from(""));
         lobby.drop(4);
         lobby.drop(3);
         lobby.drop(3);

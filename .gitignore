@@ -1,4 +1,4 @@
-/target
+/lobby/target/
 Cargo.lock
 /rmeta*
 /src
