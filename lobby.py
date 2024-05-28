@@ -1,4 +1,5 @@
 import numpy as np
+import random
 
 class lobby:
 	TURN = 1
@@ -6,9 +7,15 @@ class lobby:
 	COLUMN_COUNT = 7
 	FIELD = None
 	END = False
+	LOBBY_ID = None
+	PLAYER1_NAME = None
+	PLAYER2_NAME = None
+	PLAYER1_SID = None
+	PLAYER2_SID = None
 
-	def init(self):
+	def init(self, lobby_id):
 		self.FIELD = np.zeros((self.ROW_COUNT,self.COLUMN_COUNT))
+		self.LOBBY_ID = lobby_id
 
 	def drop(self, column):
 		if(self.FIELD[self.ROW_COUNT-1][column] == 0):
@@ -22,10 +29,15 @@ class lobby:
 							self.TURN = 2
 						else:
 							self.TURN = 1 
-
+					break
 		else:
 			print("Invalid location")
 
+	def bot_move(self):
+		column = random.randint(0,self.COLUMN_COUNT)
+		while self.FIELD[self.ROW_COUNT-1][column] != 0:
+			column = random.randrange(0,self.COLUMN_COUNT)
+		return column
 
 	def is_game_won(self):
 		for c in range(self.COLUMN_COUNT-3): #Horizontal
