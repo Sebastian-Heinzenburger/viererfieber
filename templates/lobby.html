@@ -14,7 +14,7 @@
             <div class="character" id="own_character">
                 <input type="text" value="AnonymesZebra" id="own_character_name">
                 <div>
-                    <input type="checkbox" id="ready">
+                    <input type="checkbox" id="ready" onclick="readyForGame()">
                     <label for="ready">Bereit!</label><br>
                 </div>
             </div>
@@ -22,7 +22,6 @@
                 <dialog id="join_game_dialog">
                     <form method="dialog">
                         <h1 id="message"></h1>
-                        <input type="submit"/>
                     </form>
                 </dialog>
                 <table id="board"></table>
