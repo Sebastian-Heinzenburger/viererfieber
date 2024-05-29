@@ -6,10 +6,15 @@
     margin-top: 20%;
 }
 
+#game_and_characters_div{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
 body{
     display: flex;
-    flex: row;
-    justify-content: space-evenly;
+    flex-direction: column;
     font-family: Arial, Helvetica, sans-serif;
     background-color: rgb(174, 217, 215);
 }
@@ -24,4 +29,10 @@ body{
     width: 5em;
     height: 5em;
     background-color: navy;
+}
+
+#lobby_id_div{
+    align-self: center;
+    margin-top: 1em;
+    margin-bottom: 1em;
 }
