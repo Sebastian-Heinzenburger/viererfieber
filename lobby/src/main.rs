@@ -1,194 +1,177 @@
-fn main()->(){
+use axum::{
+    body::Body,
+    extract::{ws::WebSocket, Query, State, WebSocketUpgrade},
+    http::{self, header, HeaderMap, StatusCode},
+    response::{IntoResponse, Redirect, Response},
+    routing::get,
+    Router,
+};
+use color_eyre::Result;
+use game_protocol::GameMessageRequest;
+use lobby::{Lobby, Player, WebScoketMutex};
+use rand::Rng;
+use serde::Deserialize;
+use std::{collections::HashMap, sync::Arc};
+use tokio::{fs, net::TcpListener, sync::Mutex};
+use tower_http::services::{ServeDir, ServeFile};
+use websocket_misc::recv_message;
 
+mod game_protocol;
+mod lobby;
+mod websocket_misc;
+
+#[derive(Clone, Default)]
+struct AppState {
+    lobbies: Arc<Mutex<HashMap<u16, Lobby>>>,
 }
 
-struct Lobby {
-    turn: i8,
-    field: [[i8; 7]; 6],
-    end: bool,
-    lobby_code: i8,
-    name_player1: String,
-    name_player2: String,
-    sid_player1: String,
-    sid_player2: String,
-    socket: String //später socket objekt?
+#[derive(Deserialize)]
+struct LobbyRequest {
+    num0: Option<u8>,
+    num1: Option<u8>,
+    num2: Option<u8>,
+    num3: Option<u8>,
 }
 
-impl Lobby {
-    fn new(lobby_code:i8, sid_player1: String, socket: String) -> Self{
-        return Lobby{
-            turn: 1,
-            field: [[0i8; 7]; 6],
-            end: false,
-            lobby_code: lobby_code,
-            name_player1: String::from("WeinendesWürmchen"),
-            name_player2: String::from("SchüchterneSchnecke"),
-            sid_player1: sid_player1,
-            sid_player2: String::from(""),
-            socket: socket            
+async fn lobby_http_response(lobby_code: u16) -> http::Response<Body> {
+    let mut header_map = HeaderMap::new();
+    header_map.append(header::CONTENT_TYPE, "text/html".parse().unwrap());
+    let html_content = fs::read_to_string("../templates/lobby.html").await.unwrap();
+    let html_with_lobby_code = html_content.replace("{code}", &format!("{lobby_code}"));
+
+    return (header_map, (html_with_lobby_code)).into_response();
+}
+
+async fn lobby_post_handler(
+    State(state): State<AppState>,
+    Query(params): Query<LobbyRequest>,
+) -> Response {
+    let mut lobbies = state.lobbies.lock().await;
+
+    let lobby_code = if params.num0.is_none() {
+        let new_lobby_code: u16 = rand::thread_rng().gen_range(1000..9999);
+        let new_lobby = Lobby::new(new_lobby_code);
+        lobbies.insert(new_lobby_code, new_lobby);
+        lobbies.get(&new_lobby_code).unwrap().lobby_code
+    } else {
+        let request_lobby_code = format!(
+            "{}{}{}{}",
+            params.num0.unwrap(),
+            params.num1.unwrap(),
+            params.num2.unwrap(),
+            params.num3.unwrap()
+        )
+        .parse()
+        .unwrap();
+
+        match lobbies.get(&request_lobby_code) {
+            Some(lobby_code) => lobby_code.lobby_code,
+            None => {
+                return Redirect::to("https://http.cat/404").into_response();
+            }
+        }
+    };
+
+    return lobby_http_response(lobby_code).await;
+}
+
+async fn socket_handler(state: AppState, socket: WebSocket) {
+    let socket_mutex = WebScoketMutex::new(Mutex::new(socket));
+
+    let (connected_lobby_code, connected_player) =
+        socket_lobby_and_player(&socket_mutex, &state).await;
+
+    loop {
+        match recv_message(&socket_mutex).await {
+            Ok(GameMessageRequest::SetName { name }) => {
+                let mut lobbies = state.lobbies.lock().await;
+                let lobby = lobbies
+                    .get_mut(&connected_lobby_code)
+                    .expect("this lobby does not exist");
+                match connected_player {
+                    Player::PlayerOne => lobby.name_player1 = name,
+                    Player::PlayerTwo => lobby.name_player2 = name,
+                }
+                lobby.broadcast_state().await;
+            }
+            Ok(GameMessageRequest::Ready) => {
+                let mut lobbies = state.lobbies.lock().await;
+                let lobby = lobbies
+                    .get_mut(&connected_lobby_code)
+                    .expect("this lobby does not exist");
+                match connected_player {
+                    Player::PlayerOne => lobby.ready.0 = true,
+                    Player::PlayerTwo => lobby.ready.1 = true,
+                }
+                lobby.broadcast_state().await;
+            }
+            Ok(GameMessageRequest::Drop { column }) => {
+                let mut lobbies = state.lobbies.lock().await;
+                let lobby = lobbies
+                    .get_mut(&connected_lobby_code)
+                    .expect("this lobby does not exist");
+                lobby.drop(column);
+                lobby.broadcast_state().await;
+            }
+            Err(e) => {
+                eprintln!("{}", e);
+                return;
+            }
+            _ => {}
         }
     }
+}
 
-    fn drop(&mut self, column: usize) -> (){
-        let rows:usize = 6;
-        if self.field[rows-1][column] == 0 && !self.end{
-            for row in 0usize..rows{
-				if self.field[row as usize][column] == 0{
-					self.field[row][column] = self.turn;
-					if self.is_game_won(){
-						self.end = true;
+async fn socket_lobby_and_player(
+    socket_mutex: &Arc<Mutex<WebSocket>>,
+    state: &AppState,
+) -> (u16, Player) {
+    return match recv_message(socket_mutex).await {
+        Ok(GameMessageRequest::Init { code }) => {
+            let mut lobbies = state.lobbies.lock().await;
+            match lobbies.get_mut(&code) {
+                Some(lobby) => {
+                    if lobby.socket1.is_none() {
+                        lobby.socket1 = Some(socket_mutex.clone());
+                        lobby.broadcast_state().await;
+                        (lobby.lobby_code, Player::PlayerOne)
+                    } else if lobby.socket2.is_none() {
+                        lobby.socket2 = Some(socket_mutex.clone());
+                        lobby.broadcast_state().await;
+                        (lobby.lobby_code, Player::PlayerTwo)
+                    } else {
+                        todo!()
                     }
-					else{
-						if self.turn == 1{
-							self.turn = 2;
-                        }
-						else{
-							self.turn = 1;
-                        }
-                    }
-					break;
                 }
+                None => todo!(),
             }
         }
-    }
-    fn is_game_won(&self) -> bool{
-        for c in 0usize .. 4usize{ //Horizontal
-			for r in 0usize ..6usize{
-				if self.field[r][c] == self.turn && self.field[r][c+1] == self.turn && self.field[r][c+2] == self.turn && self.field[r][c+3] == self.turn{
-					return true;
-                }
-            }
-        }
-
-        for c in 0usize..7usize{ //Vertical
-			for r in 0usize..3usize{
-				if self.field[r][c] == self.turn && self.field[r+1][c] == self.turn && self.field[r+2][c] == self.turn && self.field[r+3][c] == self.turn{
-					return true;
-                }
-            }
-        }
-
-		for c in 0usize .. 4usize{ //Diagonal top right
-			for r in 0usize ..3usize{
-				if self.field[r][c] == self.turn && self.field[r+1][c+1] == self.turn && self.field[r+2][c+2] == self.turn && self.field[r+3][c+3] == self.turn{
-					return true;
-                }
-            }
-        }
-
-		for c in 0usize .. 4usize{ //Diagonal top left
-			for r in 3usize ..6usize{
-				if self.field[r][c] == self.turn && self.field[r-1][c+1] == self.turn && self.field[r-2][c+2] == self.turn && self.field[r-3][c+3] == self.turn{
-					return true;
-                }
-            }
-        }                    
-        return false;
-    }
-
-    fn print_field(&self) -> (){
-        for row in 0usize..6usize{
-            for column in 0usize..7usize{
-                print!("{}",self.field[5-row][column].to_string());
-            }
-            println!();
-        }
-        println!();
-    }
+        _ => todo!(),
+    };
 }
 
-#[cfg(test)]
-mod tests {
-    use crate::Lobby;
-    #[test]
-    fn horizontal1(){
-        let mut lobby = Lobby:: new(1,String::from(""),String::from(""));
-        lobby.drop(0);
-        lobby.drop(0);
-        lobby.drop(1);
-        lobby.drop(1);
-        lobby.drop(2);
-        lobby.drop(2);
-        lobby.drop(3);
-        lobby.drop(3);
-        assert!(lobby.end && lobby.turn == 1);
-    }
-    #[test]
-    fn vertical1(){
-        let mut lobby = Lobby:: new(1,String::from(""),String::from(""));
-        lobby.drop(0);
-        lobby.drop(1);
-        lobby.drop(0);
-        lobby.drop(1);
-        lobby.drop(0);
-        lobby.drop(1);
-        lobby.drop(0);
-        lobby.drop(1);
-        assert!(lobby.end && lobby.turn == 1);
-    }
-    #[test]
-    fn horizontal2(){
-        let mut lobby = Lobby:: new(1,String::from(""),String::from(""));
-        lobby.drop(2);
-        lobby.drop(3);
-        lobby.drop(3);
-        lobby.drop(4);
-        lobby.drop(4);
-        lobby.drop(5);
-        lobby.drop(5);
-        lobby.drop(6);
-        lobby.drop(6);
-        assert!(lobby.end && lobby.turn == 2);
-    }
-    #[test]
-    fn vertical2(){
-        let mut lobby = Lobby:: new(1,String::from(""),String::from(""));
-        lobby.drop(6);
-        lobby.drop(5);
-        lobby.drop(5);
-        lobby.drop(6);
-        lobby.drop(4);
-        lobby.drop(5);
-        lobby.drop(6);
-        lobby.drop(5);
-        lobby.drop(6);
-        lobby.drop(5);
-        lobby.drop(6);
-        lobby.drop(5);
-        assert!(lobby.end && lobby.turn == 2);
-    }
-    #[test]
-    fn diagonal_right(){
-        let mut lobby = Lobby:: new(1,String::from(""),String::from(""));
-        lobby.drop(1);
-        lobby.drop(2);
-        lobby.drop(2);
-        lobby.drop(3);
-        lobby.drop(3);
-        lobby.drop(4);
-        lobby.drop(3);
-        lobby.drop(4);
-        lobby.drop(3);
-        lobby.drop(4);
-        lobby.drop(4);
-        lobby.drop(4);
-        assert!(lobby.end && lobby.turn == 1);
-    }
-    #[test]
-    fn diagonal_left(){
-        let mut lobby = Lobby:: new(1,String::from(""),String::from(""));
-        lobby.drop(4);
-        lobby.drop(3);
-        lobby.drop(3);
-        lobby.drop(2);
-        lobby.drop(2);
-        lobby.drop(1);
-        lobby.drop(2);
-        lobby.drop(1);
-        lobby.drop(2);
-        lobby.drop(1);
-        lobby.drop(1);
-        lobby.drop(1);
-        assert!(lobby.end && lobby.turn == 1);
-    }
+async fn switch_protocols(State(state): State<AppState>, ws: WebSocketUpgrade) -> Response {
+    ws.on_upgrade(move |socket| socket_handler(state, socket))
+}
+
+async fn not_found() -> impl IntoResponse {
+    (StatusCode::NOT_FOUND, "Not Found")
+}
+
+#[tokio::main]
+async fn main() -> Result<()> {
+    tracing_subscriber::fmt::init();
+
+    let app = Router::new()
+        .route("/ws", get(switch_protocols))
+        .nest_service("/", ServeFile::new("../templates"))
+        .nest_service("/static", ServeDir::new("../static/"))
+        .route("/lobby", get(lobby_post_handler))
+        .with_state(AppState::default())
+        .fallback(not_found);
+
+    let listener = TcpListener::bind("0.0.0.0:3001").await?;
+    axum::serve(listener, app).await?;
+
+    Ok(())
 }
