@@ -15,11 +15,13 @@ body{
 }
 
 #board{
-    width: 40em;
-    height: 40em;
     align-content: center;
-    border-color: darkblue;
-    border-radius: 1em;
-    border-width: 0.5em;
+    background-color: navy;
+}
+
+.table_field{
+    border-style: solid;
+    width: 5em;
+    height: 5em;
     background-color: navy;
 }
