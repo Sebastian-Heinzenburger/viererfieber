@@ -1,28 +1,28 @@
+use std::time::Duration;
+
 use axum::extract::ws;
-use color_eyre::{eyre::eyre, Result};
+use color_eyre::Result;
 
 use crate::{game_protocol::GameMessageRequest, lobby::WebScoketMutex};
 
-pub async fn recv_message(socket: &WebScoketMutex) -> Result<GameMessageRequest> {
-    let mut socket = socket.lock().await;
-    let ws::Message::Text(msg_str) = socket
-        .recv()
-        .await
-        .expect("disconnected")
-        .expect("malformed")
-    else {
-        return Err(eyre!("Received non Text websocket message"));
-    };
+pub async fn recv_message(socket_mutex: &WebScoketMutex) -> Result<GameMessageRequest> {
 
-    let msg: GameMessageRequest = serde_json::from_str(&msg_str).expect("couldnt parse message");
+    // not so nice. TODO(sebastian): maybe some RwLock instead?
+    loop { 
+        let mut socket = socket_mutex.lock().await;
 
-    Ok(msg)
+        tokio::select! {
+            ws_message = socket.recv() => {
+                if let Some(Ok(ws::Message::Text(msg_str))) = ws_message {
+                    let msg: GameMessageRequest = serde_json::from_str(&msg_str)?;
+                    return Ok(msg);
+                } else {
+                    panic!("at the disco");
+                }
+            },
+            _timeout_to_release_the_mutex_lock = tokio::time::sleep(Duration::from_millis(20)) => {},
+
+        }
+    }
+
 }
-
-/*
-async fn send_message(socket_mutex: &Arc<Mutex<WebSocket>>, msg: GameMessageResponse) {
-    let mut socket = socket_mutex.lock().await;
-    socket.send(msg.into()).await.expect("disconnected");
-}
-*/
-

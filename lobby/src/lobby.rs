@@ -33,7 +33,7 @@ impl Lobby {
         }
     }
 
-    pub fn drop(&mut self, column: usize) {
+    pub fn drop_disc(&mut self, column: usize) {
         let rows: usize = 6;
         if self.field[rows - 1][column] == 0 && !self.end {
             for row in 0..rows {
@@ -41,12 +41,10 @@ impl Lobby {
                     self.field[row][column] = self.turn;
                     if self.is_game_won() {
                         self.end = true;
+                    } else if self.turn == 1 {
+                        self.turn = 2;
                     } else {
-                        if self.turn == 1 {
-                            self.turn = 2;
-                        } else {
-                            self.turn = 1;
-                        }
+                        self.turn = 1;
                     }
                     break;
                 }
@@ -106,61 +104,59 @@ impl Lobby {
                 }
             }
         }
-        return false;
+        false
     }
 
-    fn print_field(&self)->(){
-        for r in self.field{
-            for c in r{
-                print!("{}",c);
-            }
-            println!();
-        }
-        println!();
-    }
 
     pub async fn broadcast_state(&self) {
-        self.print_field();
-        if let Some(socket1_mutex) = &self.socket1 {
-            print!("1");         
-            let mut socket1 = socket1_mutex.lock().await;
-            print!("2");         
 
-            socket1.send(ws::Message::Text(
-                json!({
-                    "lobby_code": self.lobby_code,
-                    "turn": self.turn == 1,
-                    "field": self.field,
-                    "end": self.end,
-                    "own_ready": self.ready.0,
-                    "opponent_ready": self.ready.1,
-                    "own_name": self.name_player1,
-                    "opponent_name": self.name_player2
-                }).to_string()
-            )).await.unwrap();
-            print!("3");         
+        if let Some(socket1_mutex) = &self.socket1 {
+            let mut socket1 = socket1_mutex.lock().await;
+
+            socket1
+                .send(ws::Message::Text(
+                    json!({
+                        "lobby_code": self.lobby_code,
+                        "turn": self.turn == 1,
+                        "field": self.field,
+                        "end": self.end,
+                        "own_ready": self.ready.0,
+                        "opponent_ready": self.ready.1,
+                        "own_name": self.name_player1,
+                        "opponent_name": self.name_player2
+                    })
+                    .to_string(),
+                ))
+                .await
+                .unwrap();
         }
-        println!("4");
+
         if let Some(socket2_mutex) = &self.socket2 {
             let mut socket2 = socket2_mutex.lock().await;
-            socket2.send(ws::Message::Text(
-                json!({
-                    "lobby_code": self.lobby_code,
-                    "turn": self.turn == 2,
-                    "field": self.field,
-                    "end": self.end,
-                    "own_ready": self.ready.1,
-                    "opponent_ready": self.ready.0,
-                    "own_name": self.name_player2,
-                    "opponent_name": self.name_player1
-                }).to_string()
-            )).await.unwrap();
+            socket2
+                .send(ws::Message::Text(
+                    json!({
+                        "lobby_code": self.lobby_code,
+                        "turn": self.turn == 2,
+                        "field": self.field,
+                        "end": self.end,
+                        "own_ready": self.ready.1,
+                        "opponent_ready": self.ready.0,
+                        "own_name": self.name_player2,
+                        "opponent_name": self.name_player1
+                    })
+                    .to_string(),
+                ))
+                .await
+                .unwrap();
         }
 
     }
 }
 
-pub enum Player {
+#[derive(Clone, Copy, Debug)]
+pub enum PlayerTurn {
     PlayerOne,
     PlayerTwo,
 }
+

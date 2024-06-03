@@ -18,17 +18,16 @@
 
     <dialog id="join_game_dialog">
       <p>Lobby Code:</p>
-      <form method="get" action="lobby" id="lobbyForm">
+      <form method="post" action="lobby" id="lobbyForm">
+        <input type="text" name="code" id="code" value="0000" hidden>
         <input
           class="code_digit"
           type="text"
           inputtype="numeric"
           maxlength="1"
-          name="num0"
-          
           id="num0"
           autocomplete="off"
-          oninput="focusInput(this,'#num1')"
+          oninput="focusInput(this, 0)"
           autofocus
         />
         <input
@@ -36,36 +35,33 @@
           type="text"
           inputtype="numeric"
           maxlength="1"
-          name="num1"
           id="num1"
           min="0"
           max="9"
           autocomplete="off"
-          oninput="focusInput(this,'#num2')"
+          oninput="focusInput(this, 1)"
         />
         <input
           class="code_digit"
           type="text"
           inputtype="numeric"
           maxlength="1"
-          name="num2"
           id="num2"
           min="0"
           max="9"
           autocomplete="off"
-          oninput="focusInput(this,'#num3')"
+          oninput="focusInput(this, 2)"
         />
         <input
           class="code_digit"
           type="text"
           inputtype="numeric"
           maxlength="1"
-          name="num3"
           id="num3"
           min="0"
           max="9"
           autocomplete="off"
-          oninput="submitDialog(this)"
+          oninput="submitDialog(this, 3)"
         />
         <button type="button" onclick="closeDialog()">Schließen</button>
         <input type="submit" />

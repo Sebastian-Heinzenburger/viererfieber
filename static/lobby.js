@@ -12,7 +12,7 @@ socket.onmessage = function (e) {
     refreshLobby(message_json);
 };
 
-socket.onopen = function (e) {
+socket.onopen = function () {
     createTable([[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0]]);
     socket_open = true;
     let obj = {};
