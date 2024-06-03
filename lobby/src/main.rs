@@ -13,7 +13,7 @@ use rand::Rng;
 use serde::Deserialize;
 use std::{collections::HashMap, sync::Arc};
 use tokio::{fs, net::TcpListener, sync::Mutex};
-use tower_http::services::{ServeDir, ServeFile};
+use tower_http::services::ServeDir;
 use websocket_misc::recv_message;
 
 mod game_protocol;
@@ -164,7 +164,7 @@ async fn main() -> Result<()> {
 
     let app = Router::new()
         .route("/ws", get(switch_protocols))
-        .nest_service("/", ServeFile::new("../templates"))
+        .nest_service("/", ServeDir::new("../templates"))
         .nest_service("/static", ServeDir::new("../static/"))
         .route("/lobby", get(lobby_post_handler))
         .with_state(AppState::default())
