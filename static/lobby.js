@@ -68,14 +68,14 @@ function createTable(server_field){
     table.innerHTML = "";
     let maxRows = 6;
     let maxColumns = 7;
-    for (let i = 0; i < maxRows; i++) {
+    for (let i = maxRows-1; i >= 0; i--) {
         const tr = table.insertRow();
         for (let j = 0; j < maxColumns; j++) {
             const td = tr.insertCell();
             td.setAttribute("onclick","clickCell("+j+")");
             td.setAttribute("class", "table_field");
             let color;
-            switch (server_field[maxRows-i][j]) {
+            switch (server_field[i][j]) {
                 case 1: 
                     color = "blue";
                     break;
