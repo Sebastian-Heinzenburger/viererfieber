@@ -66,14 +66,16 @@ function readyForGame() {
 function createTable(server_field){
     let table = document.querySelector("#table");
     table.innerHTML = "";
-    for (let i = 0; i < 6; i++) {
+    let maxRows = 6;
+    let maxColumns = 7;
+    for (let i = 0; i < maxRows; i++) {
         const tr = table.insertRow();
-        for (let j = 0; j < 7; j++) {
+        for (let j = 0; j < maxColumns; j++) {
             const td = tr.insertCell();
             td.setAttribute("onclick","clickCell("+j+")");
             td.setAttribute("class", "table_field");
             let color;
-            switch (server_field[i][j]) {
+            switch (server_field[maxRows-i][j]) {
                 case 1: 
                     color = "blue";
                     break;
