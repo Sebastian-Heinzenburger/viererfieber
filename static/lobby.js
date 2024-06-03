@@ -61,6 +61,9 @@ function refreshLobby(message_json){
 function readyForGame() {
     document.querySelector("#own_character_name").setAttribute("disabled", "disabled");
     document.querySelector("#ready").setAttribute("disabled", "disabled");
+    let obj = {};
+    obj.type = "ready";
+    socket.send(JSON.stringify(obj));
 }
 
 function createTable(server_field){

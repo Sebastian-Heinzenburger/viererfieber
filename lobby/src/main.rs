@@ -110,9 +110,9 @@ async fn socket_handler(state: AppState, socket: WebSocket) {
                 let lobby = lobbies
                     .get_mut(&connected_lobby_code)
                     .expect("this lobby does not exist");
+                
                 lobby.drop(column);
                 lobby.broadcast_state().await;
-                print!("Drop");
             }
             Err(e) => {
                 eprintln!("{}", e);
@@ -130,6 +130,7 @@ async fn socket_lobby_and_player(
     return match recv_message(socket_mutex).await {
         Ok(GameMessageRequest::Init { code }) => {
             let mut lobbies = state.lobbies.lock().await;
+            println!("GOT INIT");
             match lobbies.get_mut(&code) {
                 Some(lobby) => {
                     if lobby.socket1.is_none() {
@@ -137,8 +138,11 @@ async fn socket_lobby_and_player(
                         lobby.broadcast_state().await;
                         (lobby.lobby_code, Player::PlayerOne)
                     } else if lobby.socket2.is_none() {
+                        println!("BUILDING SOCKET2");
                         lobby.socket2 = Some(socket_mutex.clone());
+                        println!("NEXT");
                         lobby.broadcast_state().await;
+                        println!("DONEEE");
                         (lobby.lobby_code, Player::PlayerTwo)
                     } else {
                         todo!()

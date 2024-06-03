@@ -109,17 +109,23 @@ impl Lobby {
         return false;
     }
 
-    pub async fn broadcast_state(&self) {
-        if let Some(socket1_mutex) = &self.socket1 {
-            for r in self.field{
-                for c in r{
-                    print!("{}",c);
-                }
-                println!();
+    fn print_field(&self)->(){
+        for r in self.field{
+            for c in r{
+                print!("{}",c);
             }
             println!();
-            
+        }
+        println!();
+    }
+
+    pub async fn broadcast_state(&self) {
+        self.print_field();
+        if let Some(socket1_mutex) = &self.socket1 {
+            print!("1");         
             let mut socket1 = socket1_mutex.lock().await;
+            print!("2");         
+
             socket1.send(ws::Message::Text(
                 json!({
                     "lobby_code": self.lobby_code,
@@ -132,8 +138,9 @@ impl Lobby {
                     "opponent_name": self.name_player2
                 }).to_string()
             )).await.unwrap();
+            print!("3");         
         }
-
+        println!("4");
         if let Some(socket2_mutex) = &self.socket2 {
             let mut socket2 = socket2_mutex.lock().await;
             socket2.send(ws::Message::Text(
