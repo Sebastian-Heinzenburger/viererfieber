@@ -112,6 +112,7 @@ async fn socket_handler(state: AppState, socket: WebSocket) {
                     .expect("this lobby does not exist");
                 lobby.drop(column);
                 lobby.broadcast_state().await;
+                print!("Drop");
             }
             Err(e) => {
                 eprintln!("{}", e);

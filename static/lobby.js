@@ -1,6 +1,10 @@
 const socket = new WebSocket("/ws");
 let socket_open = false;
 
+code = document.querySelector("#code_input").value.split('');
+document.querySelector("#invite_link").setAttribute("href","http://192.168.178.67:3001/lobby?num0="+code[0]+"&num1="+code[1]+"&num2="+code[2]+"&num3="+code[3]);
+
+
 //{"end":false,"own_name":"Bobby","field":[[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0]],"opponent_name":"Alice","own_ready":true,"opponent_ready": false,"turn":true}
 socket.onmessage = function (e) {
     console.log(e.data);
@@ -66,7 +70,7 @@ function createTable(server_field){
         const tr = table.insertRow();
         for (let j = 0; j < 7; j++) {
             const td = tr.insertCell();
-            td.setAttribute("onclick","clickCell("+i+")");
+            td.setAttribute("onclick","clickCell("+j+")");
             td.setAttribute("class", "table_field");
             let color;
             switch (server_field[i][j]) {

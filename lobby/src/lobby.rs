@@ -111,6 +111,14 @@ impl Lobby {
 
     pub async fn broadcast_state(&self) {
         if let Some(socket1_mutex) = &self.socket1 {
+            for r in self.field{
+                for c in r{
+                    print!("{}",c);
+                }
+                println!();
+            }
+            println!();
+            
             let mut socket1 = socket1_mutex.lock().await;
             socket1.send(ws::Message::Text(
                 json!({
