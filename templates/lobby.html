@@ -12,7 +12,7 @@
         </div>
         <div id="game_and_characters_div">
             <div class="character" id="own_character">
-                <input type="text" value="AnonymesZebra" id="own_character_name">
+                <input onchange="updateName()" type="text" value="AnonymesZebra" id="own_character_name">
                 <div>
                     <input type="checkbox" id="ready" onclick="readyForGame()">
                     <label for="ready">Bereit!</label><br>
@@ -24,7 +24,7 @@
                         <h1 id="message"></h1>
                     </form>
                 </dialog>
-                <table id="board"></table>
+                <table id="table"></table>
             </div>
             <div class="character" id="opponent_character">
                 <input type="text" value="Warte auf Gegner..." id="opponent_character_name" disabled>

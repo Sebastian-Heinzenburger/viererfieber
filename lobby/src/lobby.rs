@@ -120,8 +120,8 @@ impl Lobby {
                     "end": self.end,
                     "own_ready": self.ready.0,
                     "opponent_ready": self.ready.1,
-                    "own_player": self.name_player1,
-                    "enemy_player": self.name_player2
+                    "own_name": self.name_player1,
+                    "opponent_name": self.name_player2
                 }).to_string()
             )).await.unwrap();
         }

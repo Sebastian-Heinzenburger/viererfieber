@@ -3,23 +3,38 @@ let socket_open = false;
 
 //{"end":false,"own_name":"Bobby","field":[[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0]],"opponent_name":"Alice","own_ready":true,"opponent_ready": false,"turn":true}
 socket.onmessage = function (e) {
+    console.log(e.data);
     let message_json = JSON.parse(e.data);
-    if(message_json.type == "Lobby"){
-        refreshLobby(message_json);
-    }
+    refreshLobby(message_json);
 };
 
 socket.onopen = function (e) {
+    createTable([[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0]]);
     socket_open = true;
     let obj = {};
     obj.type = "init";
-    obj.code = document.querySelector("#table").style.filter = "invert(40%) grayscale(50%);";
+    obj.code = parseInt(document.querySelector("#code_input").value);
+    socket.send(JSON.stringify(obj));
+    console.log("Geinited");
+}
+
+function updateName(){
+    let obj = {};
+    obj.type = "setName";
+    obj.name = document.querySelector("#own_character_name").value;
+    socket.send(JSON.stringify(obj));
+}
+
+function clickCell(column){
+    let obj = {};
+    obj.type = "drop";
+    obj.column = column;
     socket.send(JSON.stringify(obj));
 }
 
 function refreshLobby(message_json){
     if(message_json.end || !message_json.opponent_ready || !message_json.own_ready){
-        document.querySelector("#board").setAttribute("style", "filter: invert(40%) grayscale(50%)");
+        document.querySelector("#table").setAttribute("style", "filter: invert(40%) grayscale(50%)");
 
         if(message_json.end){
         document.querySelector("#join_game_dialog").showModal();
@@ -28,7 +43,7 @@ function refreshLobby(message_json){
         }
     }
     else{
-        document.querySelector("#board").removeAttribute("style");
+        document.querySelector("#table").removeAttribute("style");
     }
     document.querySelector("#code_input").value=message_json.lobby_code;
     createTable(message_json.field);
@@ -43,9 +58,9 @@ function readyForGame() {
     document.querySelector("#own_character_name").setAttribute("disabled", "disabled");
     document.querySelector("#ready").setAttribute("disabled", "disabled");
 }
-createTable([[0,0,0,0,0,0,0],[0,0,0,1,0,0,0],[0,0,0,2,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,2,0]]);
-function createTable(board){
-    let table = document.querySelector("#board");
+
+function createTable(server_field){
+    let table = document.querySelector("#table");
     table.innerHTML = "";
     for (let i = 0; i < 6; i++) {
         const tr = table.insertRow();
@@ -54,7 +69,7 @@ function createTable(board){
             td.setAttribute("onclick","clickCell("+i+")");
             td.setAttribute("class", "table_field");
             let color;
-            switch (board[i][j]) {
+            switch (server_field[i][j]) {
                 case 1: 
                     color = "blue";
                     break;
@@ -78,5 +93,3 @@ function createTable(board){
         }
     }
 }
-
-refreshLobby({"end":false,"own_name":"Bobby","field":[[1,2,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0]],"opponent_name":"Alice","own_ready":true,"opponent_ready": true,"turn":false, lobby_code:"1234"});
