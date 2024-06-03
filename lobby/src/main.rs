@@ -171,6 +171,7 @@ async fn main() -> Result<()> {
         .fallback(not_found);
 
     let listener = TcpListener::bind("0.0.0.0:3001").await?;
+    println!("Started Server on http://{}", listener.local_addr().unwrap());
     axum::serve(listener, app).await?;
 
     Ok(())
