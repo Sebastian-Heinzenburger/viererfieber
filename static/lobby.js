@@ -66,7 +66,7 @@ function createTable(server_field){
         const tr = table.insertRow();
         for (let j = 0; j < 7; j++) {
             const td = tr.insertCell();
-            td.setAttribute("onclick","clickCell("+i+")");
+            td.setAttribute("onclick","clickCell("+j+")");
             td.setAttribute("class", "table_field");
             let color;
             switch (server_field[i][j]) {
