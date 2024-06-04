@@ -6,3 +6,4 @@ Cargo.lock
 lobby
 .rustc_info.json
 lobby.d
+/docker
