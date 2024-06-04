@@ -6,7 +6,6 @@
         <link rel="stylesheet" href="/static/lobby.css">
     </head>
     <body>
-        <a id="home_link" href="/">Zurück</a>
         <div id="lobby_id_section">
             <span>Lobby-Code: </span>
             <input type="text" class="code_input" id="code_input" disabled value="{code}"><br>
@@ -14,9 +13,10 @@
         </div>
         <div id="game_and_characters_section">
             <div class="character self">
-                <input onchange="updateName()" type="text" value="AnonymesZebra" id="own_character_name">
-                <div>
-                    <input type="checkbox" id="ready" onclick="readyForGame()">
+                <span>Du</span>
+                <input class="name_input" onchange="updateName()" maxlength="16" type="text" value="AnonymesZebra" id="own_character_name">
+                <div class="ready_input">
+                    <input class="ready" type="checkbox" id="ready" onclick="readyForGame()">
                     <label for="ready">Bereit!</label><br>
                 </div>
             </div>
@@ -29,8 +29,9 @@
                 <table id="table"></table>
             </div>
             <div class="character opponent">
-                <input type="text" value="Warte auf Gegner..." id="opponent_character_name" disabled>
-                <div>
+                <span>Gegner</span>
+                <input class="name_input" type="text" value="Warte auf Gegner..." id="opponent_character_name" disabled>
+                <div class="ready_input">
                     <input type="checkbox" id="opponent_ready" disabled>
                     <label for="opponent_ready"><i>Bereit</i></label>        
                 </div>
