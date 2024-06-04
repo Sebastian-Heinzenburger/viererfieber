@@ -6,14 +6,14 @@
         <link rel="stylesheet" href="/static/lobby.css">
     </head>
     <body>
-        <a id="invite_link">Einladen</a>
         <a id="home_link" href="/">Zurück</a>
-        <div id="lobby_id_div">
+        <div id="lobby_id_section">
             <span>Lobby-Code: </span>
-            <input type="text" id="code_input" disabled value="{code}">
+            <input type="text" class="code_input" id="code_input" disabled value="{code}"><br>
+            <input type="button" class="copy_link" onclick="clipboardInvitation()" value="Einladungslink kopieren">
         </div>
-        <div id="game_and_characters_div">
-            <div class="character" id="own_character">
+        <div id="game_and_characters_section">
+            <div class="character self">
                 <input onchange="updateName()" type="text" value="AnonymesZebra" id="own_character_name">
                 <div>
                     <input type="checkbox" id="ready" onclick="readyForGame()">
@@ -28,7 +28,7 @@
                 </dialog>
                 <table id="table"></table>
             </div>
-            <div class="character" id="opponent_character">
+            <div class="character opponent">
                 <input type="text" value="Warte auf Gegner..." id="opponent_character_name" disabled>
                 <div>
                     <input type="checkbox" id="opponent_ready" disabled>
@@ -37,7 +37,6 @@
             </div>
         </div>
 
-
-    <script src="/static/lobby.js"></script>
+        <script src="/static/lobby.js"></script>
     </body>
 </html>

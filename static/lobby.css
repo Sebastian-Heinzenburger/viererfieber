@@ -1,9 +1,21 @@
+:root{
+    --background-color: rgb(28, 32, 32);
+    --font-color: rgb(255,255,255);
+    --element-image: linear-gradient(144deg,#5356FF, #67C6E3 60%,#DFF5FF);
+}
+
+body,#background_section{
+    margin: 0;
+    width: 100%;
+    height: 100%;
+}
 
 body{
     display: flex;
     flex-direction: column;
     font-family: Arial, Helvetica, sans-serif;
-    background-color: rgb(174, 217, 215);
+    background-color: var(--background-color);
+
 }
 
 .character{
@@ -14,7 +26,7 @@ body{
     margin-top: 20%;
 }
 
-#game_and_characters_div{
+#game_and_characters_section{
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
@@ -32,8 +44,30 @@ body{
     background-color: navy;
 }
 
-#lobby_id_div{
+#lobby_id_section{
     align-self: center;
     margin-top: 1em;
     margin-bottom: 1em;
+    font-size: 1em;
+    clear: both;
+    background-image: var(--element-image);
+    border-color: black;
+    padding: 25px;
+    border-radius: 0.5em;
+    color: var(--font-color);
+}
+#lobby_id_section .code_input{
+    background: none;
+    border: none;
+    font-size: 1em;
+    color: var(--font-color);
+    max-width: 4em;
+}
+#lobby_id_section .copy_link{
+    margin-top: 0.5em;
+    background: none;
+    border: none;
+    font-size: 1em;
+    color: var(--font-color);
+    text-decoration: underline;
 }

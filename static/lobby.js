@@ -1,11 +1,19 @@
 const socket = new WebSocket("/ws");
 let socket_open = false;
 
-code = document.querySelector("#code_input").value.split('');
-document.querySelector("#invite_link").setAttribute("href","http://192.168.178.67:3001/lobby?num0="+code[0]+"&num1="+code[1]+"&num2="+code[2]+"&num3="+code[3]);
 
+const copyToClipboard = str => {
+    if (navigator && navigator.clipboard && navigator.clipboard.writeText)
+      return navigator.clipboard.writeText(str);
+    return Promise.reject('The Clipboard API is not available.');
+};
 
-//{"end":false,"own_name":"Bobby","field":[[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0]],"opponent_name":"Alice","own_ready":true,"opponent_ready": false,"turn":true}
+function clipboardInvitation(){
+    let code = document.querySelector("#code_input").value;
+    alert("Funktioniert nur über https :c");
+    copyToClipboard("http://fzuerner.com:3001/lobby?code="+code);
+}
+
 socket.onmessage = function (e) {
     console.log(e.data);
     let message_json = JSON.parse(e.data);
