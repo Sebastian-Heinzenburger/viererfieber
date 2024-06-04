@@ -10,8 +10,9 @@ const copyToClipboard = str => {
 
 function clipboardInvitation(){
     let code = document.querySelector("#code_input").value;
-    alert("Funktioniert nur über https :c");
-    copyToClipboard("http://fzuerner.com:3001/lobby?code="+code);
+    copyToClipboard(document.location.protocol + "//" + document.location.host + "/lobby?code="+code);
+    if (document.location.protocol === "http:")
+      alert("Funktioniert nur über https :c");
 }
 
 document.addEventListener("mousemove", (e) => {
