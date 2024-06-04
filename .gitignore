@@ -3,3 +3,6 @@ lobby/target/
 Cargo.lock
 /rmeta*
 /src
+lobby
+.rustc_info.json
+lobby.d
