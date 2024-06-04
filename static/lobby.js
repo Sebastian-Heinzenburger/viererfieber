@@ -45,13 +45,30 @@ function clickCell(column){
 }
 
 function refreshLobby(message_json){
+    let status = document.querySelector("#status_section");
+    if(!message_json.opponent_ready || !message_json.own_ready){
+        status.innerText = "Warten bis alle bereit sind..."
+        status.style.opacity = "0.5";
+        status.style.animation = "";
+    }
+    else if(message_json.turn){
+        status.innerText = "Du bist an der Reihe"
+        status.style.opacity = "0.8";
+        status.style.animation = "blink 2s step-start 0s infinite";
+    }
+    else{
+        status.innerText = "Dein Gegner ist an der Reihe"
+        status.style.opacity = "0.5";
+        status.style.animation = "";
+    }
+
+
     if(message_json.end || !message_json.opponent_ready || !message_json.own_ready){
         document.querySelector("#table").setAttribute("style", "filter: invert(40%) grayscale(50%)");
-
         if(message_json.end){
-        document.querySelector("#join_game_dialog").showModal();
-            document.querySelector("#message").innerText = message_json.turn ? "gewonnen." : "verloren.";
-            document.querySelector("#join_game_dialog").showModal();
+            status.innerText = message_json.turn ? "٩(＾◡＾)۶ Gewonnen " : "༼ ༎ຶ ᆺ ༎ຶ༽ Verloren";
+            status.style.opacity = "1";
+            status.style.animation = "blink 0.5s step-start 0s infinite";
         }
     }
     else{
@@ -59,15 +76,14 @@ function refreshLobby(message_json){
     }
     document.querySelector("#code_input").value=message_json.lobby_code;
     createTable(message_json.field);
-    if(message_json.opponent_name != ""){
-        document.querySelector("#opponent_character_name").value=message_json.opponent_name;
-    }
+    document.querySelector("#opponent_character_name").value=message_json.opponent_name;
+    document.querySelector("#own_character_name").value=message_json.own_name;
+
     document.querySelector("#opponent_ready").checked = message_json.opponent_ready;
 
 }
 
 function readyForGame() {
-    document.querySelector("#own_character_name").setAttribute("disabled", "disabled");
     document.querySelector("#ready").setAttribute("disabled", "disabled");
     let obj = {};
     obj.type = "ready";

@@ -75,6 +75,22 @@ body{
     background-color: navy;
 }
 
+#status_section{
+    margin-top: 1%;
+    align-self: center;
+    font-size: 2em;
+    color: var(--font-color);
+    background-image: var(--element-image);
+    padding-left: 5%;
+    padding-right: 5%;
+    padding-top: 1%;
+    padding-bottom: 1%;
+    border-radius: 0.5em;
+}
+@keyframes blink{
+    50%{opacity: 0.5;}
+}
+
 #lobby_id_section{
     align-self: center;
     margin-top: 1em;
