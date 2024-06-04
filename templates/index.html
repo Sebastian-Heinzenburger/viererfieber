@@ -8,17 +8,18 @@
   <body>
     <div id="title_section">Vierer-Fieber</div>
     <div id="button_section">      
-      <button class="start_buttons1"  role="button" id="create_game" ><div><div class="text" onclick="createGame()" id="create_game">Spiel erstellen</div></div></button>
-      <button class="start_buttons2"  role="button" id="join_game" ><div><div class="text" onclick="joinGame()" id="join_game">Spiel beitreten</div></div></button>
+      <button class="buttons left_button"  role="button" id="create_game" ><div><div onclick="createGame()" id="create_game">Spiel erstellen</div></div></button>
+      <button class="buttons right_button"  role="button" id="join_game" ><div><div onclick="joinGame()" id="join_game">Spiel beitreten</div></div></button>
     </div>
     <div id="imprint_section">
-      <a id="imprint_section" href="/templates/imprint_section.html">Impressum</a>
+      <a href="#" onclick="prompt('Hallo Welt')">Impressum</a>
     </div>
     <dialog id="join_game_dialog">
       <p>Lobby Code:</p>
       <form method="post" action="lobby" id="lobbyForm">
         <input type="text" name="code" id="code" value="0000" hidden>
         <input
+          required
           class="code_digit"
           type="text"
           inputtype="numeric"
@@ -29,6 +30,7 @@
           autofocus
         />
         <input
+          required
           class="code_digit"
           type="text"
           inputtype="numeric"
@@ -40,6 +42,7 @@
           oninput="focusInput(this, 1)"
         />
         <input
+          required
           class="code_digit"
           type="text"
           inputtype="numeric"
@@ -51,6 +54,7 @@
           oninput="focusInput(this, 2)"
         />
         <input
+          required
           class="code_digit"
           type="text"
           inputtype="numeric"
@@ -61,12 +65,14 @@
           autocomplete="off"
           oninput="submitDialog(this, 3)"
         />
-        <button type="button" onclick="closeDialog()">Schließen</button>
-        <input type="submit" />
+        <br>
+        <button class="buttons left_button dialog_button"  type="button"><div><div onclick="closeDialog()">Schließen</div></div></button>
+        <button class="buttons right_button dialog_button"  type="button"><div><div onclick="submitDialog(document.querySelector('#num3', 3))" >Beitreten</div></div></button>
+
       </form>
     </dialog>
-    <div id="background_section">
-    </div>
+    <div id="grey_out_section" hidden></div>
+    <div id="background_section"></div>
 
     <script src="/static/index.js" ></script>
     

@@ -3,8 +3,22 @@ function createGame() {
 }
 
 function joinGame() {
-  document.querySelector("#join_game_dialog").setAttribute("open", "open");
+  let dialog = document.querySelector("#join_game_dialog");
+  let grey_out = document.querySelector("#grey_out_section")
+  dialog.setAttribute("open", "open");
+  grey_out.removeAttribute("hidden");
+  dialog.style.zIndex = "10";
+  grey_out.style.zIndex = "9";
   document.querySelector("#num0").focus();
+}
+
+function closeDialog() {
+  let dialog = document.querySelector("#join_game_dialog");
+  let grey_out = document.querySelector("#grey_out_section")
+  dialog.close();
+  grey_out.setAttribute("hidden","hidden");
+  dialog.style.zIndex = "0";
+  grey_out.style.zIndex = "0";
 }
 
 function focusInput(current, cur_index) {
@@ -12,35 +26,37 @@ function focusInput(current, cur_index) {
     current.value = current.value.replace(/[^0-9]/g, '');
   }
   else {
-    setCodeAtIndex(current.value, cur_index);
     document.querySelector(`#num${cur_index+1}`).focus();
   }
 }
 
-function closeDialog() {
-  document.querySelector("#join_game_dialog").close()
-}
 
 function submitDialog(current, index) {
   if (/[^0-9]/g.test(current.value)) {
     current.value = current.value.replace(/[^0-9]/g, '');
   }
   else {
-    setCodeAtIndex(current.value, index);
-    const dialogForm = document.querySelector('#lobbyForm');
-    if (dialogForm.checkValidity())
-      dialogForm.submit()
-  }
-}
+    let num0 = document.querySelector("#num0");
+    let num1 = document.querySelector("#num1");
+    let num2 = document.querySelector("#num2");
+    let num3 = document.querySelector("#num3");
 
-function setCodeAtIndex(num, index) {
-  let code = document.querySelector("#code");
-  code.value = code.value.substring(0, index) + num + code.value.substring(index + 1);
+    document.querySelector("#code").value = num0.value+num1.value+num2.value+num3.value;
+    const dialogForm = document.querySelector('#lobbyForm');
+
+    if (dialogForm.checkValidity() && num0.value!="" && num1.value!="" && num2.value!="" && num3.value!=""){
+      num0.value = "";
+      num1.value = "";
+      num2.value = "";
+      num3.value = "";
+      dialogForm.submit()
+    }
+  }
 }
 
 (async() => {
   let background = document.querySelector("#background_section");
-  while(true){
+  while(!!"Pineapple"){
     let circle_div = document.createElement("div");
     circle_div.setAttribute("class","background_circle");
     
