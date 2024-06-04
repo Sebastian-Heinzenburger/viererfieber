@@ -1,7 +1,7 @@
 use std::time::Duration;
 
 use axum::extract::ws;
-use color_eyre::Result;
+use color_eyre::{eyre::eyre, Result};
 
 use crate::{game_protocol::GameMessageRequest, lobby::WebScoketMutex};
 
@@ -17,7 +17,7 @@ pub async fn recv_message(socket_mutex: &WebScoketMutex) -> Result<GameMessageRe
                     let msg: GameMessageRequest = serde_json::from_str(&msg_str)?;
                     return Ok(msg);
                 } else {
-                    panic!("at the disco");
+                    return Err(eyre!("The connection was closed"));
                 }
             },
             _timeout_to_release_the_mutex_lock = tokio::time::sleep(Duration::from_millis(20)) => {},

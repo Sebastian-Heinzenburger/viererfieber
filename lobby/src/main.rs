@@ -68,15 +68,15 @@ async fn handle_player_connection(state: AppState, socket: WebSocket) {
 
     let (connected_lobby_code, connected_player) = recv_init_message(&socket_mutex, &state).await;
 
-    loop {
-        let message = recv_message(&socket_mutex).await;
+    while let Ok(message) = recv_message(&socket_mutex).await {
         handle_message(message, connected_lobby_code, connected_player, &state).await;
     }
+    disconnect_player(connected_lobby_code, connected_player, &state).await;
 }
 
 
-async fn handle_message(message: Result<GameMessageRequest>, connected_lobby_code: u16, connected_player: PlayerTurn, state: &AppState) {
-    match message.expect("I do not speak <invalid message>") {
+async fn handle_message(message: GameMessageRequest, connected_lobby_code: u16, connected_player: PlayerTurn, state: &AppState) {
+    match message {
 
         GameMessageRequest::Ready => {
             let mut lobbies = state.lobbies.lock().await;
@@ -108,16 +108,19 @@ async fn handle_message(message: Result<GameMessageRequest>, connected_lobby_cod
                 .get_mut(&connected_lobby_code)
                 .expect("this lobby does not exist");
             match lobby.ready {
-                (false, _) | (_, false) => panic!("Böser Bube will schon loslegen"),
+                (false, _) | (_, false) => { /* "Böser Bube will schon loslegen" */},
                 (true, true) => {
                     match (&connected_player, lobby.turn) {
                         (PlayerTurn::PlayerOne, 1) | (PlayerTurn::PlayerTwo, 2) => {
                             lobby.drop_disc(column);
                             lobby.broadcast_state().await;
                         }
-                        _ => panic!("Böser Bube wollte vor seinem Zug legen")
+                        _ => {/* "Böser Bube wollte vor seinem Zug legen" */ }
                     }
                 }
+            };
+            if lobby.end {
+                lobbies.remove(&connected_lobby_code);
             }
         },
 
@@ -148,6 +151,29 @@ async fn recv_init_message(
 
     lobby.broadcast_state().await;
     (lobby.lobby_code, player)
+}
+
+
+async fn disconnect_player(connected_lobby_code: u16, connected_player: PlayerTurn, state: &AppState) {
+    let mut lobbies = state.lobbies.lock().await;
+    let lobby = lobbies
+        .get_mut(&connected_lobby_code)
+        .expect("this lobby does not exist");
+
+    match connected_player {
+        PlayerTurn::PlayerOne => {
+            lobby.name_player1 = "".to_owned();
+            lobby.ready.0 = false;
+            lobby.socket1 = None;
+        },
+        PlayerTurn::PlayerTwo => {
+            lobby.name_player2 = "".to_owned();
+            lobby.ready.1 = false;
+            lobby.socket2 = None;
+        }
+    }
+
+    lobby.broadcast_state().await;
 }
 
 
