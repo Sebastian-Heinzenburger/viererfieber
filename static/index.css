@@ -1,0 +1,188 @@
+body,#background_section{
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
+body {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  margin-top: 15%;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+}
+
+#background_section{
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgb(28, 32, 32);
+  z-index: -1;
+}
+
+.background_circle{
+  position:fixed;
+  border-radius:50%;
+}
+
+@keyframes drop{
+  100%{transform: translateY(200vh)}
+}
+
+#title_section{
+  font-size: 7em;
+  clear: both;
+  background-image: linear-gradient(144deg,#5356FF, #67C6E3 60%,#DFF5FF);
+  border-color: black;
+  box-shadow: rgba(57, 51, 65, 0.2) 0 15px 30px -5px;
+  padding: 25px;
+  margin-bottom: 0.5em;
+  margin-left: 1.5em;
+  margin-right: 1.5em;
+  border-width: 0.07em;
+  border-radius: 0.3em;
+  color: white;
+}
+
+#button_container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  width: 100%;
+}
+
+
+#imprint_section{
+    margin-top: 10em;
+    font-size: 0.7em;
+}
+
+.circle {
+  position: absolute;
+  border-radius: 50%;
+  background: #fff;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.start_buttons1{
+  align-items: center;
+  justify-content: center;
+  height: 2em;
+  width: 9em;
+  font-size: 2em;
+  background-image: linear-gradient(144deg,#5356FF, #67C6E3 60%);
+  border-width: 0.0em;
+  border-radius: 0.3em;
+  box-shadow: 0.1em 0.1em 5px rgb(14, 84, 81);
+  color: white;
+  touch-action: manipulation;
+  margin-right: 0.5em;
+  padding: 0;
+}
+
+.start_buttons2{
+  align-items: center;
+  justify-content: center;
+  height: 2em;
+  width: 9em;
+  font-size: 2em;
+  background-image: linear-gradient(144deg, #67C6E3 ,#f4dfff 99%);
+  border-width: 0.0em;
+  border-radius: 0.3em;
+  box-shadow: 0.1em 0.1em 5px rgb(14, 84, 81);
+  color: white;
+  touch-action: manipulation;
+  margin-left: 0.5em;
+  padding: 0;
+}
+
+.start_buttons1 div div{
+  text-size-adjust: none;
+  background-color: rgb(28, 32, 32);
+  border-radius: 0.3em;
+  width: 8.8em;
+  height: 1.8em;
+  transition: 400ms;
+  text-align: center;
+  display: flex;
+  align-self: center;
+  justify-content: center;
+}
+
+.start_buttons2 div div{
+  text-size-adjust: none;
+  background-color: rgb(28, 32, 32);
+  border-radius: 0.3em;
+  width: 8.8em;
+  height: 1.8em;
+  transition: 400ms;
+  text-align: center;
+  display: flex;
+  align-self: center;
+  justify-content: center;
+}
+
+.start_buttons1 div{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.start_buttons2 div{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.start_buttons1:hover div {
+  background: none;
+}
+
+.start_buttons2:hover div div{
+  background: none;
+}
+
+
+.start_buttons1:active,
+.start_buttons1:hover {
+  outline: 0;
+}
+
+.start_buttons2:active,
+.start_buttons2:hover {
+  outline: 0;
+}
+
+
+@media (min-width: 768px) {
+    .button-64 {
+      font-size: 24px;
+      min-width: 196px;
+    }
+  }
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+#join_game_dialog{
+    font-weight: normal;
+    background-color: rgb(172, 232, 229);
+    border-radius: 1em;
+    margin-top: 2.5em;
+    box-shadow: 1em 1em 0.7em rgb(5, 50, 48);
+}
+
+.code_digit{
+    max-width: 1em;
+}
