@@ -118,6 +118,7 @@ impl Lobby {
                     json!({
                         "lobby_code": self.lobby_code,
                         "turn": self.turn == 1,
+                        "player_no": 1,
                         "field": self.field,
                         "end": self.end,
                         "own_ready": self.ready.0,
@@ -138,6 +139,7 @@ impl Lobby {
                     json!({
                         "lobby_code": self.lobby_code,
                         "turn": self.turn == 2,
+                        "player_no": 2,
                         "field": self.field,
                         "end": self.end,
                         "own_ready": self.ready.1,

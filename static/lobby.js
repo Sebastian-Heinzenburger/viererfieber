@@ -14,6 +14,12 @@ function clipboardInvitation(){
     copyToClipboard("http://fzuerner.com:3001/lobby?code="+code);
 }
 
+document.addEventListener("mousemove", (e) => {
+    let chip = document.querySelector("#chip");
+    chip.style.left = e.clientX - 50 + "px";
+    chip.style.top = e.clientY - 50 + "px";
+});
+
 socket.onmessage = function (e) {
     console.log(e.data);
     let message_json = JSON.parse(e.data);
@@ -81,6 +87,10 @@ function refreshLobby(message_json){
 
     document.querySelector("#opponent_ready").checked = message_json.opponent_ready;
 
+    if (message_json.own_ready && message_json.opponent_ready) {
+      document.querySelector("#chip").setAttribute("visibility", (message_json.turn && !message_json.end) ? "" : "hidden");
+      document.querySelector("#chip > circle:nth-child(1)").setAttribute("fill", message_json.player_no == 1 ? "blue" : "red");
+    }
 }
 
 function readyForGame() {

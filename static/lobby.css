@@ -118,3 +118,11 @@ body{
     color: var(--font-color);
     text-decoration: underline;
 }
+
+#chip {
+  pointer-events: none;
+  position: absolute;
+  top: 30%;
+  left: 48%;
+  filter: drop-shadow(12px 11px 30px #000000);
+}
