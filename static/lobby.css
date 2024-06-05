@@ -75,18 +75,54 @@ body{
     background-color: navy;
 }
 
-#status_section{
-    margin-top: 1%;
-    align-self: center;
-    font-size: 2em;
-    color: var(--font-color);
+
+.buttons{
     background-image: var(--element-image);
-    padding-left: 5%;
-    padding-right: 5%;
-    padding-top: 1%;
-    padding-bottom: 1%;
-    border-radius: 0.5em;
+    background-size: 200% 100%;
+    align-items: center;
+    justify-content: center;
+    height: 2em;
+    width: 9em;
+    font-size: 2em;
+    border-width: 0.0em;
+    border-radius: 0.3em;
+    box-shadow: 0.1em 0.1em 5px rgb(14, 84, 81);
+    color: var(--font-color);
+    touch-action: manipulation;
+    padding: 0;
 }
+    
+.buttons div div{
+    text-size-adjust: none;
+    background-color: var(--background-color);
+    border-radius: 0.3em;
+    height: 1.8em;
+    transition: 400ms;
+    text-align: center;
+    display: flex;
+    align-self: center;
+    justify-content: center;
+    white-space:nowrap;
+    overflow:hidden;
+    margin-left: 0.1em;
+    margin-right: 0.1em;
+}
+  
+.buttons div{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+  
+.buttons:hover div {
+    background: none;
+}
+
+.buttons{
+    align-self: center;
+    width: fit-content;
+}
+
 @keyframes blink{
     50%{opacity: 0.5;}
 }
