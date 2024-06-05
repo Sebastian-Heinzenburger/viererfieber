@@ -162,3 +162,99 @@ pub enum PlayerTurn {
     PlayerTwo,
 }
 
+
+#[cfg(test)]
+mod tests {
+    use crate::Lobby;
+    #[test]
+    fn horizontal1(){
+        let mut lobby = Lobby::new(1234);
+        lobby.drop_disc(0);
+        lobby.drop_disc(0);
+        lobby.drop_disc(1);
+        lobby.drop_disc(1);
+        lobby.drop_disc(2);
+        lobby.drop_disc(2);
+        lobby.drop_disc(3);
+        lobby.drop_disc(3);
+        assert!(lobby.end && lobby.turn == 1);
+    }
+    #[test]
+    fn vertical1(){
+        let mut lobby = Lobby::new(1234);
+        lobby.drop_disc(0);
+        lobby.drop_disc(1);
+        lobby.drop_disc(0);
+        lobby.drop_disc(1);
+        lobby.drop_disc(0);
+        lobby.drop_disc(1);
+        lobby.drop_disc(0);
+        lobby.drop_disc(1);
+        assert!(lobby.end && lobby.turn == 1);
+    }
+    #[test]
+    fn horizontal2(){
+        let mut lobby = Lobby::new(1234);
+        lobby.drop_disc(2);
+        lobby.drop_disc(3);
+        lobby.drop_disc(3);
+        lobby.drop_disc(4);
+        lobby.drop_disc(4);
+        lobby.drop_disc(5);
+        lobby.drop_disc(5);
+        lobby.drop_disc(6);
+        lobby.drop_disc(6);
+        assert!(lobby.end && lobby.turn == 2);
+    }
+    #[test]
+    fn vertical2(){
+        let mut lobby = Lobby::new(1234);
+        lobby.drop_disc(6);
+        lobby.drop_disc(5);
+        lobby.drop_disc(5);
+        lobby.drop_disc(6);
+        lobby.drop_disc(4);
+        lobby.drop_disc(5);
+        lobby.drop_disc(6);
+        lobby.drop_disc(5);
+        lobby.drop_disc(6);
+        lobby.drop_disc(5);
+        lobby.drop_disc(6);
+        lobby.drop_disc(5);
+        assert!(lobby.end && lobby.turn == 2);
+    }
+    #[test]
+    fn diagonal_right(){
+        let mut lobby = Lobby::new(1234);
+        lobby.drop_disc(1);
+        lobby.drop_disc(2);
+        lobby.drop_disc(2);
+        lobby.drop_disc(3);
+        lobby.drop_disc(3);
+        lobby.drop_disc(4);
+        lobby.drop_disc(3);
+        lobby.drop_disc(4);
+        lobby.drop_disc(3);
+        lobby.drop_disc(4);
+        lobby.drop_disc(4);
+        lobby.drop_disc(4);
+        assert!(lobby.end && lobby.turn == 1);
+    }
+    #[test]
+    fn diagonal_left(){
+        let mut lobby = Lobby::new(1234);
+        lobby.drop_disc(4);
+        lobby.drop_disc(3);
+        lobby.drop_disc(3);
+        lobby.drop_disc(2);
+        lobby.drop_disc(2);
+        lobby.drop_disc(1);
+        lobby.drop_disc(2);
+        lobby.drop_disc(1);
+        lobby.drop_disc(2);
+        lobby.drop_disc(1);
+        lobby.drop_disc(1);
+        lobby.drop_disc(1);
+        assert!(lobby.end && lobby.turn == 1);
+    }
+}
