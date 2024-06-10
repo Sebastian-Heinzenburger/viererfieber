@@ -67,8 +67,7 @@ function submitDialog(current, index) {
     circle_div.style.paddingBottom = circle_rad+"%";
     circle_div.style.left = Math.floor(Math.random()*background.clientWidth) + "px";
     circle_div.style.top = "-50%";
-    circle_div.style.background = Math.random()>0.5 ? "red":"blue";
-    
+    circle_div.style.background = Math.random()>0.5 ? "linear-gradient(#5356FF, #67C6E3 60%,#DFF5FF)":"linear-gradient(#ACA900, #98391C 60%, #200A00)";
     background.appendChild(circle_div);
     
     circle_div.addEventListener("animationend", (event) => {
