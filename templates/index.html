@@ -1,20 +1,52 @@
 <!DOCTYPE html>
 <html lang="de">
   <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/static/root.css">
     <link rel="stylesheet" href="/static/index.css">
     <title>Vierer-Fieber</title>
   </head>
   <body>
-    <div id="title_section">Vierer-Fieber</div>
-    <div id="button_section">      
-      <button class="buttons left_button"  role="button" id="create_game" ><div><div onclick="createGame()" id="create_game">Spiel erstellen</div></div></button>
-      <button class="buttons right_button"  role="button" id="join_game" ><div><div onclick="joinGame()" id="join_game">Spiel beitreten</div></div></button>
+    <div class="text title_div">Vierer-Fieber</div>
+    <div id="button_div">      
+      <button class="button left_button" onclick="createGame()">Spiel erstellen</button>
+      <button class="button right_button" onclick="joinGame()">Spiel beitreten</button>
     </div>
-    <div id="imprint_section">
-      <a href="#" onclick="prompt('Hallo Welt')">Impressum</a>
+    <div class="rules">
+      <section>
+        <h1>Willkommen!</h1>
+        <p>
+          Willkommen zum unglaublichen Vierer-Fieber! Hier gibt es ein simples Spiel, das klassischerweise auch Vier-Gewinnt genannt wird. Lasst uns zuerst aber die grundlegende Navigation erklären:
+        </p>
+        </section>
+      <section>
+        <h1>Ein Spiel erstellen/beitreten</h1>
+        <p>
+          Das Spiel kann generell nur zu zweit gespielt werden. Um eine Runde zu eröffnen, kann einer der Spieler auf der Startseite die Option "Spiel erstellen" wählen. Daraufhin wird er zu dem Wartebereich und späteren Spielbrett weitergeleitet. <br>
+          Der andere Spieler kann dann auf der Startseite die Option "Spiel beitreten" wählen und in dem Pop-Up Fenster den 4-stelligen Code, den der erste Spieler in dem Wartebereich über dem Spielbrett sehen kann, eingeben. <br>
+          Jetzt seid ihr auf dem gleichen Spielfeld angekommen. 
+        </p>
+      </section>
+      <section>
+        <h1>Das Spiel starten</h1>
+        <p>
+          Bevor ihr anfangt, müsst ihr aber noch einen Namen wählen! Das passiert in dem Eingabefeld links neben dem Spielbrett. Wir haben schonmal einen lustigen Namen vorbereitet aber jeder kann sich natürlich auch einen eigenen aussuchen. Sobald das Feld nicht mehr ausgewählt ist, wird der Name auch bei dem Mitspieler  angezeigt. <br>
+          Sobald du mit dem Namen zufrieden bist, kannst du den Haken "Bereit!" setzen. Sobald das beide gemacht haben, wird das Brett farbig und es kann losgehen! Falls ihr während des Spiels den Namen spontan doch nochmal ändern wollt, könnt ihr das natürlich noch immer machen.
+        </p>
+        </section>
+      <section>
+        <h1>So wird gespielt!</h1>
+        <p>
+          Bei Vier-Gewinnt platzieren die beiden abwechselnd je einen Stein in der eigenen Farbe (die eigene Farbe ist hier immer blau, währen der Gegner rote Steine platziert) auf das Brett setzen. Das besondere beim Setzen ist aber, dass die Steine immer an die unterste freie Stelle des Spielbrettes platziert werden. Wenn eine Spalte voll ist, wird kein Stein gesetzt. Unter dem Brett ist ein Feld, das anzeig, ob man gerade am Zug ist oder nicht.<br>
+          Um zu gewinnen, muss man es schaffen vier Steine in der eigenen Farbe in einer Reihe zu setzen! Eine Reihe heißt hier entweder waagerecht nebeneinander, senkrecht übereinander oder diagonal. Hauptsache die vier Steine bilden eine gerade und ununterbrochene Linie. Wer das zuerst geschafft hat, ist der Sieger. <br>
+          Das Feld unter dem Spielbrett zeigt nach dem Spiel an, wer gewonnen bzw. verloren hat. Mit einem Klick darauf, kommt man zu Startseite zurück. 
+        </p>
+      </section>
     </div>
-    <dialog id="join_game_dialog">
+    <div class="imprint_div">
+      <a class="link" href="#" onclick="prompt('Hallo Welt')">Impressum</a>
+    </div>
+    <dialog id="join_game_dialog" class="join_game_dialog">
       <p>Lobby Code:</p>
       <form method="post" action="lobby" id="lobbyForm">
         <input type="text" name="code" id="code" value="0000" hidden>
@@ -22,57 +54,47 @@
           required
           class="code_digit"
           type="text"
-          inputtype="numeric"
           maxlength="1"
           id="num0"
           autocomplete="off"
           oninput="focusInput(this, 0)"
           autofocus
-        />
+        >
         <input
           required
           class="code_digit"
           type="text"
-          inputtype="numeric"
           maxlength="1"
           id="num1"
-          min="0"
-          max="9"
           autocomplete="off"
           oninput="focusInput(this, 1)"
-        />
+        >
         <input
           required
           class="code_digit"
           type="text"
-          inputtype="numeric"
           maxlength="1"
           id="num2"
-          min="0"
-          max="9"
           autocomplete="off"
           oninput="focusInput(this, 2)"
-        />
+        >
         <input
           required
           class="code_digit"
           type="text"
-          inputtype="numeric"
           maxlength="1"
           id="num3"
-          min="0"
-          max="9"
           autocomplete="off"
           oninput="submitDialog(this, 3)"
-        />
+        >
         <br>
-        <button class="buttons left_button dialog_button" type="button"><div><div onclick="closeDialog()">Schließen</div></div></button>
-        <button class="buttons right_button dialog_button" type="button"><div><div onclick="submitDialog(document.querySelector('#num3', 3))" >Beitreten</div></div></button>
+        <button class="button left_button dialog_button" type="button" onclick="closeDialog()">Schließen</button>
+        <button class="button right_button dialog_button" type="button" onclick="submitDialog(document.querySelector('#num3', 3))">Beitreten</button>
 
       </form>
     </dialog>
-    <div id="grey_out_section" hidden></div>
-    <div id="background_section"></div>
+    <div id="grey_out_div" class="grey_out_div" hidden></div>
+    <div id="background_div" class="background_div"></div>
 
     <script src="/static/index.js" ></script>
     

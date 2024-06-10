@@ -3,17 +3,18 @@
     <head>
         <title>Vierer-Fieber</title>
         <meta charset="UTF-8">
+        <link rel="stylesheet" href="/static/root.css">
         <link rel="stylesheet" href="/static/lobby.css">
     </head>
     <body>
-        <div id="lobby_id_section">
+        <div id="lobby_id_div" class="lobby_id_div text">
             <span>Lobby-Code: </span>
             <input type="text" class="code_input" id="code_input" disabled value="{code}"><br>
             <input type="button" class="copy_link" onclick="clipboardInvitation()" value="Einladungslink kopieren">
         </div>
-        <div id="game_and_characters_section">
+        <div id="game_and_characters_div" class="game_and_characters_div">
             <div class="character self">
-                <span>Du</span>
+                <span class="text">Du</span>
                 <input class="name_input" onchange="updateName()" maxlength="16" type="text" placeholder="Name" value="" id="own_character_name">
                 <div class="ready_input">
                     <input class="ready" type="checkbox" id="ready" onclick="readyForGame()">
@@ -21,10 +22,10 @@
                 </div>
             </div>
             <div id="board_div">
-                <table id="table"></table>
+                <table id="table" class="table"></table>
             </div>
             <div class="character opponent">
-                <span>Gegner</span>
+                <span class="text">Gegner</span>
                 <input class="name_input" type="text" value="Warte auf Gegner..." id="opponent_character_name" disabled>
                 <div class="ready_input">
                     <input type="checkbox" id="opponent_ready" disabled>
@@ -32,10 +33,9 @@
                 </div>
             </div>
         </div>
-        <button class="buttons" role="button" ><div><div id="status_section">Spiel beitreten</div></div></button>
+        <button class="button status_button"  id="status_button">Spiel beitreten</button>
 
-        <svg id="chip" height="100" width="100" visibility="hidden" xmlns="http://www.w3.org/2000/svg"><circle r="45" cx="50" cy="50" fill="blue"></circle></svg>
-
+        <svg id="chip" class="chip" height="100" width="100" visibility="hidden"></svg>
         <script src="/static/lobby.js"></script>
     </body>
 </html>

@@ -4,7 +4,7 @@ function createGame() {
 
 function joinGame() {
   let dialog = document.querySelector("#join_game_dialog");
-  let grey_out = document.querySelector("#grey_out_section")
+  let grey_out = document.querySelector("#grey_out_div")
   dialog.setAttribute("open", "open");
   grey_out.removeAttribute("hidden");
   dialog.style.zIndex = "10";
@@ -14,7 +14,7 @@ function joinGame() {
 
 function closeDialog() {
   let dialog = document.querySelector("#join_game_dialog");
-  let grey_out = document.querySelector("#grey_out_section")
+  let grey_out = document.querySelector("#grey_out_div")
   dialog.close();
   grey_out.setAttribute("hidden","hidden");
   dialog.style.zIndex = "0";
@@ -55,7 +55,7 @@ function submitDialog(current, index) {
 }
 
 (async() => {
-  let background = document.querySelector("#background_section");
+  let background = document.querySelector("#background_div");
   while(!!"Pineapple"){
     let circle_div = document.createElement("div");
     circle_div.setAttribute("class","background_circle");

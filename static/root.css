@@ -1,0 +1,46 @@
+:root{
+    --background-color: rgb(28, 32, 32);
+    --font-color: rgb(255,255,255);
+    --element-image: linear-gradient(144deg,#5356FF, #67C6E3 60%,#DFF5FF);
+    --button-border: linear-gradient(var(--background-color), var(--background-color)), radial-gradient(circle at top left, #5356FF, #67C6E3 60%,#DFF5FF);
+}
+
+body{
+    display: flex;
+    flex-direction: column;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: var(--background-color);
+}
+
+body,.background_div,.grey_out_div{
+    margin: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.text{
+    text-align: center;
+    padding: 1%;
+    border-radius: 0.3em;
+    background-image: var(--element-image);
+    color: var(--font-color);
+}
+
+.button{
+    width: fit-content;
+    font-size: 2em;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    padding-top: 0.2em;
+    padding-bottom: 0.2em;
+    color: var(--font-color);
+    
+    border: double 0.2em transparent;
+    border-radius: 0.4em;
+    background-image: var(--button-border);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+}
+.button:hover {
+    background-image: var(--element-image);
+}

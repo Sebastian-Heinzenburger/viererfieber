@@ -22,7 +22,6 @@ document.addEventListener("mousemove", (e) => {
         for (let i = 0; i < table.rows[0].cells.length; i++) {
             let column = table.rows[0].cells[i];
             let rect = column.getBoundingClientRect();
-        //  console.log(rect.top, rect.right, rect.bottom, rect.left);
             
             if(e.clientX>=rect.left && e.clientX<rect.right){
                 chip.style.top = (rect.top+globalThis.scrollY-chip.clientHeight/2)+"px";
@@ -66,13 +65,13 @@ async function clickCell(column){
         let column_element = table.rows[i].cells[column];
         let rect = column_element.getBoundingClientRect();
         
-        if("darkslateblue" == column_element.firstChild.firstChild.getAttribute("fill")){
+        //if("darkslateblue" == column_element.firstChild.firstChild.getAttribute("fill")){
             chip.style.top = (rect.top+globalThis.scrollY)+"px";
             chip.style.left = rect.left + "px";
-        }
-        else{
-            break;
-        }
+        //}
+        //else{
+            //break;
+        //}
     }
     let obj = {};
     obj.type = "drop";
@@ -83,11 +82,10 @@ async function clickCell(column){
 }
 
 function refreshLobby(message_json){
-    let status = document.querySelector("#status_section");
-    let parent_div = status.parentElement.parentElement;
+    let status = document.querySelector("#status_button");
     if(!message_json.opponent_ready || !message_json.own_ready){
         status.innerText = "Warten bis alle bereit sind..."
-        parent_div.style.opacity = "0.5";
+        status.style.opacity = "0.5";
         status.style.animation = "";
         status.parentElement.onmouseover = (event) => {
         };
@@ -95,21 +93,21 @@ function refreshLobby(message_json){
     }
     else if(message_json.turn){
         status.innerText = "Du bist an der Reihe"
-        parent_div.style.opacity = "0.8";
+        status.style.opacity = "0.8";
         status.style.animation = "blink 2s step-start 0s infinite";
     }
     else{
         status.innerText = "Dein Gegner ist an der Reihe"
-        parent_div.style.opacity = "0.5";
+        status.style.opacity = "0.5";
         status.style.animation = "";
     }
 
 
     if(message_json.end || !message_json.opponent_ready || !message_json.own_ready){
-        document.querySelector("#table").setAttribute("style", "filter: invert(40%) grayscale(50%)");
+        //document.querySelector("#table").setAttribute("style", "filter: invert(40%) grayscale(50%)");
         if(message_json.end){
             status.innerText = message_json.turn ? "٩(＾◡＾)۶ Gewonnen " : "༼ ༎ຶ ᆺ ༎ຶ༽ Verloren";
-            parent_div.style.opacity = "1";
+            status.style.opacity = "1";
             status.style.animation = "blink 0.5s step-start 0s infinite";
             status.setAttribute("onclick","window.location.href='"+document.location.protocol + "//" + document.location.host+"';");
             status.style.cursor = "pointer";
@@ -126,8 +124,30 @@ function refreshLobby(message_json){
     document.querySelector("#opponent_ready").checked = message_json.opponent_ready;
 
     if (message_json.own_ready && message_json.opponent_ready) {
-      document.querySelector("#chip").setAttribute("visibility", (message_json.turn && !message_json.end) ? "" : "hidden");
-      document.querySelector("#chip > circle:nth-child(1)").setAttribute("fill", message_json.player_no == 1 ? "blue" : "red");
+        document.querySelector("#chip").setAttribute("visibility", (message_json.turn && !message_json.end) ? "" : "hidden");
+        if(message_json.player_no == 1){
+            document.querySelector("#chip").innerHTML =   `<defs>
+                                                                <linearGradient id="gradiant-" x1="0%" x2="100%" y1="0%" y2="0%">
+                                                                    <stop offset="0%" stop-color="#5356FF"/>
+                                                                    <stop offset="60%" stop-color="#67C6E3"/>
+                                                                    <stop offset="100%" stop-color="#DFF5FF"/>
+                                                                </linearGradient>
+                                                            </defs>
+                                                            <circle r="45" cx="50" cy="50" fill="url(#gradiant-)">
+                                                            `;
+        }
+        else{
+            document.querySelector("#chip").innerHTML =   `<defs>
+                                                                <linearGradient id="gradiant-" x1="0%" x2="100%" y1="0%" y2="0%">
+                                                                    <stop offset="0%" stop-color="#ACA900"/>
+                                                                    <stop offset="60%" stop-color="#98391C"/>
+                                                                    <stop offset="100%" stop-color="#200A00"/>
+                                                                </linearGradient>
+                                                            </defs>
+                                                            <circle r="45" cx="50" cy="50" fill="url(#gradiant-)">
+                                                            `;
+        }
+                                                
     }
 }
 
@@ -152,15 +172,34 @@ function createTable(server_field){
             let color;
             switch (server_field[i][j]) {
                 case 1: 
-                    color = "blue";
+                    color = `<defs>
+                                <linearGradient id="gradiant`+String(i)+String(j)+`" x1="0%" x2="100%" y1="0%" y2="0%">
+                                <stop offset="0%" stop-color="#5356FF" />
+                                <stop offset="60%" stop-color="#67C6E3" />
+                                <stop offset="100%" stop-color="#DFF5FF" />
+                                </linearGradient>
+                            </defs>`;
                     break;
                 case 2: 
-                    color = "red";
+                    color = `<defs>
+                                <linearGradient id="gradiant`+String(i)+String(j)+`" x1="0%" x2="100%" y1="0%" y2="0%">
+                                <stop offset="0%" stop-color="#ACA900" />
+                                <stop offset="60%" stop-color="#98391C" />
+                                <stop offset="100%" stop-color="#200A00" />
+                                </linearGradient>
+                            </defs>`;
                     break;
                 default: 
-                    color = "darkslateblue";
+                    color = `<defs>
+                                <linearGradient id="gradiant`+String(i)+String(j)+`" x1="0%" x2="100%" y1="0%" y2="0%">
+                                <stop offset="0%" stop-color="var(--background-color)" />
+                                </linearGradient>
+                            </defs>`;
             }
-            td.innerHTML = '<svg height="100" width="100"><circle r="45" cx="50" cy="50" fill="'+color+'" /></svg>';
+            td.innerHTML = `<svg height="100" width="100">
+                            `+color+`
+                            <circle r="45" cx="50" cy="50" fill="url(#gradiant`+String(i)+String(j)+`)">
+                            </svg>`;
         }
     }
 }

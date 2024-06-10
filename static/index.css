@@ -1,25 +1,9 @@
-:root{
-  --background-color: rgb(28, 32, 32);
-  --font-color: rgb(255,255,255);
-  --element-image: linear-gradient(144deg,#5356FF, #67C6E3 60%,#DFF5FF);
-}
-
-body,#background_section,#grey_out_section{
-  margin: 0;
-  width: 100%;
-  height: 100%;
-}
-
 body {
-  display: flex;
-  flex-direction: column;
   text-align: center;
-  margin-top: 10%;
-  font-family: Arial, Helvetica, sans-serif;
   font-weight: bold;
 }
 
-#background_section{
+.background_div{
   position: absolute;
   top: 0;
   left: 0;
@@ -35,52 +19,26 @@ body {
 @keyframes drop{
   100%{transform: translateY(200vh)}
 }
-
-#title_section{
+    
+.title_div{
   font-size: 7em;
   clear: both;
-  background-image: var(--element-image);
   border-color: black;
   box-shadow: rgba(57, 51, 65, 0.2) 0 15px 30px -5px;
-  padding: 25px;
   margin-bottom: 0.5em;
   margin-left: 1.5em;
   margin-right: 1.5em;
+  margin-top: 1.5em;
   border-width: 0.07em;
-  border-radius: 0.3em;
-  color: var(--font-color);
 }
 
-#button_container{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  width: 100%;
-}
-
-#imprint_section{
+.imprint_div{
   margin-top: 10em;
   font-size: 1em;
 }
-#imprint_section a{
-  color: var(--font-color);
-}
 
-.buttons{
-  background-image: var(--element-image);
-  background-size: 200% 100%;
-  align-items: center;
-  justify-content: center;
-  height: 2em;
-  width: 9em;
-  font-size: 2em;
-  border-width: 0.0em;
-  border-radius: 0.3em;
-  box-shadow: 0.1em 0.1em 5px rgb(14, 84, 81);
+.imprint_div .link{
   color: var(--font-color);
-  touch-action: manipulation;
-  padding: 0;
 }
 
 .left_button{
@@ -92,30 +50,13 @@ body {
   margin-left: 0.5em;
 }
 
-.buttons div div{
-  text-size-adjust: none;
-  background-color: var(--background-color);
-  border-radius: 0.3em;
-  width: 8.8em;
-  height: 1.8em;
-  transition: 400ms;
-  text-align: center;
-  display: flex;
-  align-self: center;
-  justify-content: center;
+.rules{
+  margin: 0em 10em;
+  text-align: left;
+  color: var(--font-color);
 }
 
-.buttons div{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.buttons:hover div {
-  background: none;
-}
-
-#join_game_dialog{
+.join_game_dialog{
   font-weight: 2em;
   font-size: 2em;
   color: var(--font-color);
@@ -132,13 +73,13 @@ body {
   text-align: center;
   border: dotted;
 }
+
 .dialog_button{
-  margin-top: 4%;
-  width: 30%;
+  margin-top: 2em;
   font-size: 1em;
 }
 
-#grey_out_section{
+.grey_out_div{
   position: absolute;
   top: 0;
   bottom: 0;
