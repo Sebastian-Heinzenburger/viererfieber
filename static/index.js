@@ -75,6 +75,5 @@ function submitDialog(current, index) {
     });
 
     await new Promise(r => setTimeout(r, 500));
-    console.log("HALLO :D");
   }
 })()
