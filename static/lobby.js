@@ -65,13 +65,13 @@ async function clickCell(column){
         let column_element = table.rows[i].cells[column];
         let rect = column_element.getBoundingClientRect();
         
-        //if("darkslateblue" == column_element.firstChild.firstChild.getAttribute("fill")){
+        if(column_element.firstChild.getAttribute("data-owner")==0){
             chip.style.top = (rect.top+globalThis.scrollY)+"px";
             chip.style.left = rect.left + "px";
-        //}
-        //else{
-            //break;
-        //}
+        }
+        else{
+            break;
+        }
     }
     let obj = {};
     obj.type = "drop";
@@ -196,7 +196,7 @@ function createTable(server_field){
                                 </linearGradient>
                             </defs>`;
             }
-            td.innerHTML = `<svg height="100" width="100">
+            td.innerHTML = `<svg height="100" width="100" data-owner="`+server_field[i][j]+`">
                             `+color+`
                             <circle r="45" cx="50" cy="50" fill="url(#gradiant`+String(i)+String(j)+`)">
                             </svg>`;
