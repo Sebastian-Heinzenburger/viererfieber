@@ -9,7 +9,7 @@
   </head>
   <body>
     <div class="text title_div">Vierer-Fieber</div>
-    <div id="button_div">      
+    <div>      
       <button class="button left_button" onclick="createGame()">Spiel erstellen</button>
       <button class="button right_button" onclick="joinGame()">Spiel beitreten</button>
     </div>
@@ -45,12 +45,16 @@
       </section>
     </div>
     <div class="imprint_div">
-      <a class="link" href="#" onclick="prompt('Hallo Welt')">Impressum</a>
+      <p onclick="document.querySelector('#imprint_dialog').setAttribute('open','open');">Impressum</p>
+      <dialog class="imprint_dialog text" id="imprint_dialog">
+        <iframe src="impressum.html" class="imprint_iframe"></iframe>
+        <button onclick="document.querySelector('#imprint_dialog').removeAttribute('open');">Schließen</button>
+      </dialog>
     </div>
     <dialog id="join_game_dialog" class="join_game_dialog">
       <p>Lobby Code:</p>
       <form method="post" action="lobby" id="lobbyForm">
-        <input type="text" name="code" id="code" value="0000" hidden>
+        <input type="hidden" name="code" id="code" value="0000">
         <input
           required
           class="code_digit"
@@ -61,6 +65,7 @@
           oninput="focusInput(this, 0)"
           autofocus
         >
+    </div>
         <input
           required
           class="code_digit"

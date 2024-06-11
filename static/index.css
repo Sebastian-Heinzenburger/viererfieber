@@ -32,15 +32,6 @@ body {
   border-width: 0.07em;
 }
 
-.imprint_div{
-  margin-top: 10em;
-  font-size: 1em;
-}
-
-.imprint_div .link{
-  color: var(--font-color);
-}
-
 .left_button{
   margin-right: 0.5em;
 }
@@ -107,7 +98,7 @@ input[type=number] {
   -moz-appearance: textfield;
 }
 
-#rules{
+.rules{
     margin: 0em 10em;
     text-align: left;
     color: var(--font-color);

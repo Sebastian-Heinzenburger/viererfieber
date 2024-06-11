@@ -10,6 +10,7 @@ body{
     flex-direction: column;
     font-family: Arial, Helvetica, sans-serif;
     background-color: var(--background-color);
+    color: var(--font-color);
 }
 
 body,.background_div,.grey_out_div{
@@ -43,4 +44,23 @@ body,.background_div,.grey_out_div{
 }
 .button:hover {
     background-image: var(--element-image);
+}
+
+.imprint_div{
+    margin-top: 2em;
+    font-size: 1em;
+    text-decoration: underline;
+    align-self: center;
+}
+
+.imprint_dialog{
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    right: inherit;
+}
+.imprint_iframe{
+    width: 100%;
+    margin: 0;
 }

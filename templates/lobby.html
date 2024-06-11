@@ -37,6 +37,13 @@
         <button class="button status_button"  id="status_button">Spiel beitreten</button>
 
         <svg id="chip" class="chip" height="100" width="100" visibility="hidden"></svg>
+        <div class="imprint_div">
+            <p onclick="document.querySelector('#imprint_dialog').setAttribute('open','open');">Impressum</p>
+            <dialog class="imprint_dialog text" id="imprint_dialog">
+              <iframe src="impressum.html" class="imprint_iframe"></iframe>
+              <button onclick="document.querySelector('#imprint_dialog').removeAttribute('open');">Schließen</button>
+            </dialog>
+          </div>
         <script src="/static/lobby.js"></script>
     </body>
 </html>
