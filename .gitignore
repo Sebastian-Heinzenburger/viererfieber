@@ -1,9 +1,3 @@
-/lobby/target/
-lobby/target/
-Cargo.lock
+target
+docker
 /rmeta*
-/src
-lobby
-.rustc_info.json
-lobby.d
-/docker
