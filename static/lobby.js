@@ -2,6 +2,9 @@ const socket = new WebSocket("/ws");
 let socket_open = false;
 let chip_falling_animation = false;
 
+// autoplay must be enabled in the browser
+(new Audio("https://ia802808.us.archive.org/30/items/WiiSportsTheme/Wii Sports Theme.mp3")).play();
+
 const copyToClipboard = str => {
     if (navigator && navigator.clipboard && navigator.clipboard.writeText)
       return navigator.clipboard.writeText(str);
