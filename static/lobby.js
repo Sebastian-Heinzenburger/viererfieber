@@ -2,12 +2,13 @@ const socket = new WebSocket("/ws");
 let socket_open = false;
 let chip_falling_animation = false;
 
+
+//Copy invitation link to clipboard - only works with https protocol
 const copyToClipboard = str => {
     if (navigator && navigator.clipboard && navigator.clipboard.writeText)
       return navigator.clipboard.writeText(str);
     return Promise.reject('The Clipboard API is not available.');
 };
-
 function clipboardInvitation(){
     let code = document.querySelector("#code_input").value;
     copyToClipboard(document.location.protocol + "//" + document.location.host + "/lobby?code="+code);
@@ -15,28 +16,15 @@ function clipboardInvitation(){
       alert("Funktioniert nur über https :c");
 }
 
-document.addEventListener("mousemove", (e) => {
-    let chip = document.querySelector("#chip");
-    if(!chip_falling_animation){
-        let table = document.querySelector("#table");
-        for (let i = 0; i < table.rows[0].cells.length; i++) {
-            let column = table.rows[0].cells[i];
-            let rect = column.getBoundingClientRect();
-            
-            if(e.clientX>=rect.left && e.clientX<rect.right){
-                chip.style.top = (rect.top+globalThis.scrollY-chip.clientHeight/2)+"px";
-                chip.style.left = rect.left + "px";
-            }
-        }
-    }    
-});
 
+//Called when server sends a message
 socket.onmessage = function (e) {
     console.log(e.data);
     let message_json = JSON.parse(e.data);
     refreshLobby(message_json);
 };
 
+//Called when websocket connection is established
 socket.onopen = function () {
     createTable([[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0],[0,0,0,0,0,0,0]]);
     socket_open = true;
@@ -47,6 +35,7 @@ socket.onopen = function () {
     console.log("Geinited");
 }
 
+//Called when user changes their name
 function updateName(){  
     let obj = {};
     obj.type = "setName";
@@ -55,6 +44,15 @@ function updateName(){
 
 }
 
+//Inform server that user is ready to play
+function readyForGame() {
+    document.querySelector("#ready").setAttribute("disabled", "disabled");
+    let obj = {};
+    obj.type = "ready";
+    socket.send(JSON.stringify(obj));
+}
+
+//Called when user clicks on a game field cell
 async function clickCell(column){
     let chip = document.querySelector("#chip");
     let table = document.querySelector("#table");
@@ -81,6 +79,7 @@ async function clickCell(column){
     chip_falling_animation = false;
 }
 
+//Called when server sends lobby object
 function refreshLobby(message_json){
     let status = document.querySelector("#status_button");
     if(!message_json.opponent_ready || !message_json.own_ready){
@@ -104,7 +103,6 @@ function refreshLobby(message_json){
 
 
     if(message_json.end || !message_json.opponent_ready || !message_json.own_ready){
-        //document.querySelector("#table").setAttribute("style", "filter: invert(40%) grayscale(50%)");
         if(message_json.end){
             status.innerText = message_json.turn ? "٩(＾◡＾)۶ Gewonnen " : "༼ ༎ຶ ᆺ ༎ຶ༽ Verloren";
             status.style.opacity = "1";
@@ -151,21 +149,16 @@ function refreshLobby(message_json){
     }
 }
 
-function readyForGame() {
-    document.querySelector("#ready").setAttribute("disabled", "disabled");
-    let obj = {};
-    obj.type = "ready";
-    socket.send(JSON.stringify(obj));
-}
-
+//Build game field from javascript
 function createTable(server_field){
     let table = document.querySelector("#table");
-    table.innerHTML = "";
+    table.innerHTML = ""; //Start by clearing table
     let maxRows = 6;
     let maxColumns = 7;
     for (let i = maxRows-1; i >= 0; i--) {
         const tr = table.insertRow();
         for (let j = 0; j < maxColumns; j++) {
+            //Fill table with chips
             const td = tr.insertCell();
             td.setAttribute("onclick","clickCell("+j+")");
             td.setAttribute("class", "table_field");
@@ -203,3 +196,21 @@ function createTable(server_field){
         }
     }
 }
+
+
+//If game running and user turn awaited, place a simulated chip on field column nearest to mouse pointer
+document.addEventListener("mousemove", (e) => {
+    let chip = document.querySelector("#chip");
+    if(!chip_falling_animation){
+        let table = document.querySelector("#table");
+        for (let i = 0; i < table.rows[0].cells.length; i++) {
+            let column = table.rows[0].cells[i];
+            let rect = column.getBoundingClientRect();
+            
+            if(e.clientX>=rect.left && e.clientX<rect.right){
+                chip.style.top = (rect.top+globalThis.scrollY-chip.clientHeight/2)+"px";
+                chip.style.left = rect.left + "px";
+            }
+        }
+    }    
+});

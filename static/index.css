@@ -98,8 +98,4 @@ input[type=number] {
   -moz-appearance: textfield;
 }
 
-.rules{
-    margin: 0em 10em;
-    text-align: left;
-    color: var(--font-color);
-}
+

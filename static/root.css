@@ -64,3 +64,9 @@ body,.background_div,.grey_out_div{
     width: 100%;
     margin: 0;
 }
+
+.plain_text{
+    margin: 0% 15%;
+    text-align: left;
+    color: var(--font-color);
+}
