@@ -1,17 +1,13 @@
 [package]
-name = "lobby"
+name = "viererfieber-backend"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-anyhow = "1.0.86"
 axum = { version = "0.7.5", features = ["ws"] }
 color-eyre = "0.6.3"
-crossbeam = { version = "0.8.4", features = ["crossbeam-channel"] }
 rand = "0.8.5"
 serde = { version = "1.0.203", features = ["derive", "default"] }
 serde_json = { version = "1.0.117", features = ["default"] }
 tokio = { version = "1.37.0", features = ["full", "sync"] }
-tower-http = { version = "0.5.2", features = ["tracing", "fs"] }
-tracing = "0.1.40"
-tracing-subscriber = "0.3.18"
+tower-http = { version = "0.5.2", features = ["fs"] }

@@ -1,3 +1,6 @@
+// autoplay must be enabled in the browser
+(new Audio("https://ia802808.us.archive.org/30/items/WiiSportsTheme/Wii Sports Theme.mp3")).play();
+
 //Called by clicking "Spiel erstellen"
 function createGame() {
   document.location.href = "/lobby";
