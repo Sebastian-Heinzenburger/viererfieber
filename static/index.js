@@ -1,5 +1,28 @@
-// autoplay must be enabled in the browser
-(new Audio("https://ia802808.us.archive.org/30/items/WiiSportsTheme/Wii Sports Theme.mp3")).play();
+let sound = new Audio("https://ia802808.us.archive.org/30/items/WiiSportsTheme/Wii Sports Theme.mp3");
+sound.loop = true;
+
+function toggleSound(){
+  let line = document.querySelector("#sound_icon line")
+  if(!sound.paused){
+    line.setAttribute("x1","5.281");
+    line.setAttribute("y1","22.032");
+    line.setAttribute("x2","22.058");
+    line.setAttribute("y2","1.125");
+    sound.pause()
+  }
+  else{
+    line.setAttribute("x1","0");
+    line.setAttribute("y1","0");
+    line.setAttribute("x2","0");
+    line.setAttribute("y2","0");
+    try{
+        sound.play()
+    }
+    catch(exception){
+        console.log("Sound not played");
+    }
+  }
+}
 
 //Called by clicking "Spiel erstellen"
 function createGame() {
@@ -71,6 +94,7 @@ function submitDialog() {
 
 //Background Animation - Falling Chips
 (async() => {
+  // autoplay must be enabled in the browser
   let background = document.querySelector("#background_div");
   let timer_date = Date.now();
   while(!!"Pineapple"){ //Short for while(true)

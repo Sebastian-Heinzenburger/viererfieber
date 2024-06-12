@@ -1,10 +1,34 @@
+let sound = new Audio("https://dn720304.ca.archive.org/0/items/WiiSportsResortOST/004%20Wii%20Sports%20Resort%20Title%20Ret.mp3");
+sound.loop = true;
+
+function toggleSound(){
+  let line = document.querySelector("#sound_icon line")
+  if(!sound.paused){
+    line.setAttribute("x1","5.281");
+    line.setAttribute("y1","22.032");
+    line.setAttribute("x2","22.058");
+    line.setAttribute("y2","1.125");
+    sound.pause()
+  }
+  else{
+    line.setAttribute("x1","0");
+    line.setAttribute("y1","0");
+    line.setAttribute("x2","0");
+    line.setAttribute("y2","0");
+    try{
+        sound.play()
+    }
+    catch(exception){
+        console.log("Sound not played");
+    }
+  }
+}
+toggleSound();
+
+
 const socket = new WebSocket("/ws");
 let socket_open = false;
 let chip_falling_animation = false;
-
-// autoplay must be enabled in the browser
-(new Audio("https://ia802808.us.archive.org/30/items/WiiSportsTheme/Wii Sports Theme.mp3")).play();
-
 
 //Copy invitation link to clipboard - only works with https protocol
 const copyToClipboard = str => {

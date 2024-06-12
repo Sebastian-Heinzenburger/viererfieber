@@ -70,3 +70,11 @@ body,.background_div,.grey_out_div{
     text-align: left;
     color: var(--font-color);
 }
+
+.sound_icon{
+    position: fixed;
+    top: 1%;
+    left: 1%;
+    fill: var(--font-color);
+    stroke: var(--font-color);
+}
