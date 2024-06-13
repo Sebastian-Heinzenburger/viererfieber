@@ -173,7 +173,11 @@ async fn disconnect_player(connected_lobby_code: u16, connected_player: PlayerTu
         }
     }
 
-    lobby.broadcast_state().await;
+    match (&lobby.socket1, &lobby.socket2) {
+        (None, None) => { lobbies.remove(&connected_lobby_code); },
+                  _  => { lobby.broadcast_state().await; }
+    }
+
 }
 
 
