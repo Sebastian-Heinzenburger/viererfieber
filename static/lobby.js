@@ -1,14 +1,15 @@
 let sound_array = ["https://dn720304.ca.archive.org/0/items/WiiSportsResortOST/004%20Wii%20Sports%20Resort%20Title%20Ret.mp3","https://ia802302.us.archive.org/33/items/SSBA_mp3/Vol.%2001%20-%20Super%20Smash%20Bros%2F009.%20Battlefield.mp3","https://ia802202.us.archive.org/8/items/genshin-impact-music-collection/13.%20Forest%20of%20J%C3%B1%C4%81na%20and%20Vidy%C4%81%2FDisc%204%20-%20Battles%20of%20Sumeru%2F097.%20Swirls%20of%20the%20Stream.mp3"];
 let sound_index = 0;
 let sound = new Audio(sound_array[sound_index]);
+sound.addEventListener("ended", nextSound);        
 
 function nextSound(){
     if(sound_index > sound_array.length-1){
         sound_index = 0;
     }
-    sound = new Audio(sound_array[sound_index++]);
+    sound.src = sound_array[sound_index++];
+    sound.load();
     sound.play();
-    sound.addEventListener("ended", nextSound);        
 }
 
 function toggleSound(){
