@@ -122,3 +122,11 @@ function submitDialog() {
     await new Promise(r => setTimeout(r, 50));
   }
 })();
+
+function openImprint(){
+  document.querySelector('#imprint_dialog').setAttribute('open','open');
+}
+
+function closeImprint(){
+  document.querySelector('#imprint_dialog').removeAttribute('open');
+}

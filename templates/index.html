@@ -49,10 +49,10 @@
       </section>
     </div>
     <div class="imprint_div">
-      <p onclick="document.querySelector('#imprint_dialog').setAttribute('open','open');">Impressum</p>
+      <p onclick="openImprint();">Impressum</p>
       <dialog class="imprint_dialog text" id="imprint_dialog">
         <iframe src="impressum.html" class="imprint_iframe"></iframe>
-        <button class="button" onclick="document.querySelector('#imprint_dialog').removeAttribute('open');">Schließen</button>
+        <button class="button" onclick="closeImprint();">Schließen</button>
       </dialog>
     </div>
     <dialog id="join_game_dialog" class="join_game_dialog">
