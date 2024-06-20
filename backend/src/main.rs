@@ -208,13 +208,13 @@ async fn main() -> Result<()> {
     let address = "0.0.0.0:3001";
     println!("Strarting Server on http://{address}");
 
-    const SSL_PATH_CERT: &str = "/web/.ssl/cert.pem";
-    const SSL_PATH_KEY: &str = "/web/.ssl/key.pem";
+    const SSL_PATH_CERT: &str = "/.ssl/cert.pem";
+    const SSL_PATH_KEY: &str = "/.ssl/key.pem";
 
     if let Ok(true) = fs::try_exists(SSL_PATH_CERT).await {
         let tls_config = RustlsConfig::from_pem_file(SSL_PATH_CERT, SSL_PATH_KEY).await?;
         let listener = std::net::TcpListener::bind(address)?;
-        axum_server::from_tcp_rustls(listener, tls_config);
+        axum_server::from_tcp_rustls(listener, tls_config).serve(app.into_make_service()).await?;
     } else {
         let listener = tokio::net::TcpListener::bind(address).await?;
         axum::serve(listener, app).await?;
