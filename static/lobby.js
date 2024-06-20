@@ -237,3 +237,11 @@ document.addEventListener("mousemove", (e) => {
         }
     }    
 });
+
+function openImprint(){
+    document.querySelector('#imprint_dialog').setAttribute('open','open');
+  }
+  
+  function closeImprint(){
+    document.querySelector('#imprint_dialog').removeAttribute('open');
+  }
