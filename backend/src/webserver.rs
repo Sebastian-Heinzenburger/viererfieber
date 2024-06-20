@@ -2,7 +2,7 @@ use anyhow::Result;
 use axum::{
     extract::{ws::WebSocket, State, WebSocketUpgrade},
     http::StatusCode,
-    response::{Html, IntoResponse},
+    response::{Html, IntoResponse, Response},
     routing::any,
     Form, Router,
 };
@@ -15,11 +15,11 @@ use crate::connect_four::{Lobby, LobbyStore, Lobbycode};
 
 #[derive(Debug, Default, Clone)]
 struct AppState {
-    lobby_store: LobbyStore,
+    lobbies: LobbyStore,
 }
 
 async fn socket_handler(socket: WebSocket, state: AppState, code: Lobbycode) {
-    let mut lobbies = state.lobby_store.0.lock().await;
+    let mut lobbies = state.lobbies.0.lock().await;
     if let Some(lobby) = lobbies.get_mut(&code) {
         lobby.connect(socket).unwrap();
     }
@@ -40,7 +40,7 @@ async fn switch_protocols(
             .on_upgrade(move |socket| socket_handler(socket, state, code))
             .into_response(),
         None => (StatusCode::BAD_REQUEST, "your lobby does not exist").into_response(),
-    }
+    };
 }
 
 #[derive(Debug, Deserialize)]
@@ -53,11 +53,11 @@ async fn lobby_handler(
     State(state): State<AppState>,
     Form(params): Form<LobbyRequestParams>,
 ) -> impl IntoResponse {
-    let code = match params.code {
+    let lobby_code = match params.code {
         None => Lobby::create().0,
         Some(code) => {
-            let lobbies = state.lobby_store.0.lock().await;
-            if lobbies.get(&Lobbycode(code)).is_some() {
+            let lobby_store = state.lobbies.0.lock().await;
+            if lobby_store.get(&Lobbycode(code)).is_some() {
                 Lobbycode(code)
             } else {
                 return (StatusCode::NOT_FOUND, "The lobby does not exist").into_response();
@@ -66,10 +66,14 @@ async fn lobby_handler(
     };
 
     session
-        .insert("lobby_code", code.clone())
+        .insert("lobby_code", lobby_code.clone())
         .await
         .expect("Could not set sessions lobby code");
 
+    format_lobby_template(lobby_code).await
+}
+
+async fn format_lobby_template(code: Lobbycode) -> Response {
     let lobby_template = fs::read_to_string("../templates/lobby.html")
         .await
         .expect("The lobby template is missing")
