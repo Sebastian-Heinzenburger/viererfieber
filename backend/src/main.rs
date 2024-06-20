@@ -205,7 +205,7 @@ async fn main() -> Result<()> {
         .with_state(AppState::default())
         .fallback(not_found);
 
-    let address = "0.0.0.0:3001";
+    let address = "0.0.0.0:8080";
     println!("Strarting Server on http://{address}");
 
     const SSL_PATH_CERT: &str = "/.ssl/cert.pem";
