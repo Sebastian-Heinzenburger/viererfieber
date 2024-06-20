@@ -4,9 +4,9 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+anyhow = { version = "1.0.86", features = ["backtrace"] }
 axum = { version = "0.7.5", features = ["ws"] }
 axum-server = { version = "0.6.0", features = ["tls-rustls"] }
-color-eyre = "0.6.3"
 rand = "0.8.5"
 serde = { version = "1.0.203", features = ["derive", "default"] }
 serde_json = { version = "1.0.117", features = ["default"] }

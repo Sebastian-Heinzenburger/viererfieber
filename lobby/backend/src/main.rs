@@ -198,10 +198,10 @@ async fn not_found() -> impl IntoResponse {
 #[tokio::main]
 async fn main() -> Result<()> {
     let app = Router::new()
-        .route("/ws", get(switch_protocols))
         .nest_service("/", ServeDir::new("../templates"))
         .nest_service("/static", ServeDir::new("../static/"))
         .route("/lobby", any(lobby_post_handler))
+        .route("/ws", get(switch_protocols))
         .with_state(AppState::default())
         .fallback(not_found);
 
