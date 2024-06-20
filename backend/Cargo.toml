@@ -1,0 +1,15 @@
+[package]
+name = "viererfieber-backend"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = { version = "1.0.86", features = ["backtrace"] }
+axum = { version = "0.7.5", features = ["ws"] }
+axum-server = { version = "0.6.0", features = ["tls-rustls"] }
+rand = "0.8.5"
+serde = { version = "1.0.203", features = ["derive", "default"] }
+serde_json = { version = "1.0.117", features = ["default"] }
+tokio = { version = "1.37.0", features = ["full", "sync"] }
+tower-http = { version = "0.5.2", features = ["fs"] }
+tower-sessions = "0.12.2"
