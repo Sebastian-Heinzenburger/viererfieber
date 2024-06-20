@@ -20,6 +20,9 @@
     .character{
         font-size: 1.7em;
     }
+    #chip{
+        visibility: hidden !important;
+    }
 }
 
 

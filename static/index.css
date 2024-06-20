@@ -13,22 +13,44 @@ body {
 
 
 @media (max-width: 768px) {
+  .button_div{
+    display: flex;
+    flex-direction: column;
+  }
   .button {
     font-size: 2em;
     align-self: center;
-    margin-left: auto !important;
-    margin-right: auto !important;
-    margin-top: 1em;
-  }
-  .title_div {
-    font-size: 3em !important;
-    width: fit-content;
-    padding: 0.5em;
     margin-left: auto;
     margin-right: auto;
+    margin-top: 1em;
+  }
+  .right_button{
+    clear: both;
+  }
+
+  .title_div {
+    font-size: 3em;
+    padding: 0.5em;
   }
   .code_digit{
-    font-size: 1em !important;
+    font-size: 1em;
+  }
+}
+@media (min-width: 769px) {
+  .left_button{
+    margin-right: 0.5em;
+  }
+  
+  .right_button{
+    background-position: 100% 0%;
+    margin-left: 0.5em;
+  }
+  
+  .title_div {
+    font-size: 7em;
+  }
+  .code_digit{
+    font-size: 2em;
   }
 }
 
@@ -38,7 +60,6 @@ body {
 }
     
 .title_div{
-  font-size: 7em;
   clear: both;
   border-color: black;
   box-shadow: rgba(57, 51, 65, 0.2) 0 15px 30px -5px;
@@ -47,15 +68,6 @@ body {
   margin-right: 1.5em;
   margin-top: 1.5em;
   border-width: 0.07em;
-}
-
-.left_button{
-  margin-right: 0.5em;
-}
-
-.right_button{
-  background-position: 100% 0%;
-  margin-left: 0.5em;
 }
 
 .rules{
@@ -75,7 +87,6 @@ body {
 }
 
 .code_digit{
-  font-size: 2em;
   max-width: 1em;
   background: none;
   text-align: center;

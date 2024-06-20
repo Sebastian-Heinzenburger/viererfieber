@@ -139,6 +139,7 @@ function refreshLobby(message_json){
             status.innerText = message_json.turn ? "٩(＾◡＾)۶ Gewonnen " : "༼ ༎ຶ ᆺ ༎ຶ༽ Verloren";
             status.style.opacity = "1";
             status.style.animation = "blink 0.5s step-start 0s infinite";
+            status.classList.add("status_button");
             status.setAttribute("onclick","window.location.href='"+document.location.protocol + "//" + document.location.host+"';");
             status.style.cursor = "pointer";
         }
