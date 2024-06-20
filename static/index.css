@@ -12,6 +12,26 @@ body {
 }
 
 
+@media (max-width: 768px) {
+  .button {
+    font-size: 2em;
+    align-self: center;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    margin-top: 1em;
+  }
+  .title_div {
+    font-size: 3em !important;
+    width: fit-content;
+    padding: 0.5em;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .code_digit{
+    font-size: 1em !important;
+  }
+}
+
 
 @keyframes drop{
   100%{transform: translateY(200vh)}
@@ -101,3 +121,4 @@ input[type=number] {
   position:fixed;
   border-radius:50%;
 }
+

@@ -74,7 +74,6 @@ function updateName(){
     obj.type = "setName";
     obj.name = document.querySelector("#own_character_name").value;
     socket.send(JSON.stringify(obj));
-
 }
 
 //Inform server that user is ready to play
@@ -155,28 +154,24 @@ function refreshLobby(message_json){
     document.querySelector("#opponent_ready").checked = message_json.opponent_ready;
 
     if (message_json.own_ready && message_json.opponent_ready) {
-        document.querySelector("#chip").setAttribute("visibility", (message_json.turn && !message_json.end) ? "" : "hidden");
-        if(message_json.player_no == 1){
-            document.querySelector("#chip").innerHTML =   `<defs>
-                                                                <linearGradient id="gradiant-" x1="0%" x2="100%" y1="0%" y2="0%">
-                                                                    <stop offset="0%" stop-color="#5356FF"/>
-                                                                    <stop offset="60%" stop-color="#67C6E3"/>
-                                                                    <stop offset="100%" stop-color="#DFF5FF"/>
-                                                                </linearGradient>
-                                                            </defs>
-                                                            <circle r="45" cx="50" cy="50" fill="url(#gradiant-)">
-                                                            `;
+        if(message_json.turn && !message_json.end){
+            document.querySelector("#chip").removeAttribute("hidden");
         }
         else{
-            document.querySelector("#chip").innerHTML =   `<defs>
-                                                                <linearGradient id="gradiant-" x1="0%" x2="100%" y1="0%" y2="0%">
-                                                                    <stop offset="0%" stop-color="#ACA900"/>
-                                                                    <stop offset="60%" stop-color="#98391C"/>
-                                                                    <stop offset="100%" stop-color="#200A00"/>
-                                                                </linearGradient>
-                                                            </defs>
-                                                            <circle r="45" cx="50" cy="50" fill="url(#gradiant-)">
-                                                            `;
+            document.querySelector("#chip").setAttribute("hidden","hidden");
+        }
+
+        let width = document.querySelector("table tr td").getBoundingClientRect().width;
+        console.log(width);
+        
+        document.querySelector("#chip").style.width = width + "px";
+        document.querySelector("#chip").style.height = width + "px";
+
+        if(message_json.player_no == 2){
+            document.querySelector("#chip").style.background = "linear-gradient(#ACA900, #98391C 60%, #200A00)";
+        }
+        else{
+            document.querySelector("#chip").style.background = "linear-gradient(#5356FF, #67C6E3 60%,#DFF5FF)";
         }
                                                 
     }
@@ -211,11 +206,12 @@ function createTable(server_field){
             circle_div.setAttribute("class","background_circle");
             
             circle_div.style.width = "100%";
-            circle_div.style.height = "100%";
+            circle_div.style.aspectRatio = "1 / 1";
             circle_div.style.background = color;
+            circle_div.setAttribute("data-owner",server_field[i][j]);
             td.appendChild(circle_div);
 
-            td.style.height = table.offsetWidth/7.5+"px";
+            td.style.width = "calc(100% / 7)";
         }
     }
 }
@@ -226,7 +222,7 @@ document.addEventListener("mousemove", (e) => {
     let chip = document.querySelector("#chip");
     if(!chip_falling_animation){
         let table = document.querySelector("#table");
-        for (let i = 0; i < table.rows[0].cells.length; i++) {
+        for (let i = 0; i < table.rows[0]?.cells.length; i++) {
             let column = table.rows[0].cells[i];
             let rect = column.getBoundingClientRect();
             

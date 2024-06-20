@@ -79,7 +79,3 @@ body,.background_div,.grey_out_div{
     fill: var(--font-color);
     stroke: var(--font-color);
 }
-
-.background_circle{
-    border-radius:50%;
-}

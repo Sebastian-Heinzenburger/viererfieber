@@ -18,9 +18,8 @@
         width: 100%;
     }
     .character{
-        font-size: 2em;
+        font-size: 1.7em;
     }
-
 }
 
 
@@ -119,4 +118,8 @@
 
 svg{
     color: var(--element-image);
+}
+
+.background_circle{
+    border-radius:50%;
 }
