@@ -6,6 +6,25 @@
     margin-top: 1%;
 }
 
+.board_div{
+    width: 50%;
+}
+
+@media (max-width: 768px) {
+    .game_and_characters_div {
+        flex-direction: column !important;
+    }
+    .board_div {
+        width: 100%;
+    }
+    .character{
+        font-size: 2em;
+    }
+
+}
+
+
+
 .character span{
     align-self: center;
     margin-right: 1em;
@@ -22,6 +41,7 @@
     border-image: var(--element-image) 30;
     color: var(--font-color);
     width: 90%;
+    align-self: center;
 }
 
 .character.self .name_input:hover{
@@ -44,14 +64,14 @@
     align-content: center;
     background-color: darkslateblue;
     color: darkslateblue;
+    width: 100%;
+    height: fit-content;
 }
 
 .table_field{
     border-style: solid;
-    width: 5em;
-    height: 5em;
     background-color: darkslateblue;
-    ;
+    width: fit-content;
 }
 
 @keyframes blink{

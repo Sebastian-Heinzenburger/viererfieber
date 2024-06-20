@@ -6,6 +6,7 @@
 }
 
 body{
+    position: absolute;
     display: flex;
     flex-direction: column;
     font-family: Arial, Helvetica, sans-serif;
@@ -77,4 +78,8 @@ body,.background_div,.grey_out_div{
     left: 1%;
     fill: var(--font-color);
     stroke: var(--font-color);
+}
+
+.background_circle{
+    border-radius:50%;
 }

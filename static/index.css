@@ -11,10 +11,7 @@ body {
   z-index: -1;
 }
 
-.background_circle{
-  position:fixed;
-  border-radius:50%;
-}
+
 
 @keyframes drop{
   100%{transform: translateY(200vh)}
@@ -99,3 +96,8 @@ input[type=number] {
 }
 
 
+
+.background_circle{
+  position:fixed;
+  border-radius:50%;
+}

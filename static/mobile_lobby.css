@@ -1,0 +1,28 @@
+body{
+    display: grid;
+    grid-template-areas:
+        'header header header'
+        'field field field'
+        'player1 status player2'
+        'imprint imprint imprint';
+    gap: 10px;
+    padding: 10px;
+}
+.character .self{
+    grid-area: player1;
+}
+.character .opponent{
+    grid-area: player2;
+}
+.board_div{
+    grid-area: field;
+}
+.lobby_id_div{
+    grid-area: header;
+}
+.status_button{
+    grid-area: status;
+}
+.imprint_div{
+    grid-area: imprint;
+}

@@ -1,4 +1,4 @@
-let sound_array = ["https://dn720304.ca.archive.org/0/items/WiiSportsResortOST/004%20Wii%20Sports%20Resort%20Title%20Ret.mp3","https://ia802302.us.archive.org/33/items/SSBA_mp3/Vol.%2001%20-%20Super%20Smash%20Bros%2F009.%20Battlefield.mp3","https://ia802202.us.archive.org/8/items/genshin-impact-music-collection/13.%20Forest%20of%20J%C3%B1%C4%81na%20and%20Vidy%C4%81%2FDisc%204%20-%20Battles%20of%20Sumeru%2F097.%20Swirls%20of%20the%20Stream.mp3"];
+let sound_array = ["https://dn720304.ca.archive.org/0/items/WiiSportsResortOST/004%20Wii%20Sports%20Resort%20Title%20Ret.mp3","https://ia802302.us.archive.org/33/items/SSBA_mp3/Vol.%2001%20-%20Super%20Smash%20Bros%2F009.%20Battlefield.mp3","https://ia802202.us.archive.org/8/items/genshin-impact-music-collection/13.%20Forest%20of%20J%C3%B1%C4%81na%20and%20Vidy%C4%81%2FDisc%204%20-%20Battles%20of%20Sumeru%2F097.%20Swirls%20of%20the%20Stream.mp3","https://ia601406.us.archive.org/13/items/c-418-aria-math-minecraft-volume-beta/C418%20-%20Aria%20Math%20%28Minecraft%20Volume%20Beta%29.mp3"];
 let sound_index = 0;
 let sound = new Audio(sound_array[sound_index]);
 sound.addEventListener("ended", nextSound);        
@@ -197,35 +197,25 @@ function createTable(server_field){
             td.setAttribute("class", "table_field");
             let color;
             switch (server_field[i][j]) {
+                case 2:
+                    color = "linear-gradient(#ACA900, #98391C 60%, #200A00)";
+                    break;
                 case 1: 
-                    color = `<defs>
-                                <linearGradient id="gradiant`+String(i)+String(j)+`" x1="0%" x2="100%" y1="0%" y2="0%">
-                                <stop offset="0%" stop-color="#5356FF" />
-                                <stop offset="60%" stop-color="#67C6E3" />
-                                <stop offset="100%" stop-color="#DFF5FF" />
-                                </linearGradient>
-                            </defs>`;
+                    color = "linear-gradient(#5356FF, #67C6E3 60%,#DFF5FF)";
                     break;
-                case 2: 
-                    color = `<defs>
-                                <linearGradient id="gradiant`+String(i)+String(j)+`" x1="0%" x2="100%" y1="0%" y2="0%">
-                                <stop offset="0%" stop-color="#ACA900" />
-                                <stop offset="60%" stop-color="#98391C" />
-                                <stop offset="100%" stop-color="#200A00" />
-                                </linearGradient>
-                            </defs>`;
-                    break;
-                default: 
-                    color = `<defs>
-                                <linearGradient id="gradiant`+String(i)+String(j)+`" x1="0%" x2="100%" y1="0%" y2="0%">
-                                <stop offset="0%" stop-color="var(--background-color)" />
-                                </linearGradient>
-                            </defs>`;
+                default:
+                    color = "var(--background-color)";
             }
-            td.innerHTML = `<svg height="100" width="100" data-owner="`+server_field[i][j]+`">
-                            `+color+`
-                            <circle r="45" cx="50" cy="50" fill="url(#gradiant`+String(i)+String(j)+`)">
-                            </svg>`;
+        
+            let circle_div = document.createElement("div");
+            circle_div.setAttribute("class","background_circle");
+            
+            circle_div.style.width = "100%";
+            circle_div.style.height = "100%";
+            circle_div.style.background = color;
+            td.appendChild(circle_div);
+
+            td.style.height = table.offsetWidth/7.5+"px";
         }
     }
 }

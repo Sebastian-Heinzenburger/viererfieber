@@ -6,6 +6,7 @@
         <link rel="stylesheet" href="/static/root.css">
         <link rel="stylesheet" href="/static/lobby.css">
         <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+        <meta content="width=device-width, initial-scale=1" name="viewport">
     </head>
     <body>
         <svg class="sound_icon" id="sound_icon" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" onclick="toggleSound()">
@@ -15,7 +16,7 @@
         <div id="lobby_id_div" class="lobby_id_div text">
             <span>Lobby-Code: </span>
             <input type="text" class="code_input" id="code_input" disabled value="{code}"><br>
-            <input type="button" class="copy_link" onclick="clipboardInvitation()" value="Einladungslink kopieren">
+            <input type="button" class="copy_link" onclick="clipboardInvitation()" value="Einladungslink kopieren" hidden>
         </div>
         <div id="game_and_characters_div" class="game_and_characters_div">
             <div class="character self">
@@ -26,7 +27,7 @@
                     <label for="ready">Bereit!</label><br>
                 </div>
             </div>
-            <div id="board_div">
+            <div id="board_div" class="board_div">
                 <table id="table" class="table"></table>
             </div>
             <div class="character opponent">
