@@ -5,6 +5,7 @@ edition = "2021"
 
 [dependencies]
 axum = { version = "0.7.5", features = ["ws"] }
+axum-server = { version = "0.6.0", features = ["tls-rustls"] }
 color-eyre = "0.6.3"
 rand = "0.8.5"
 serde = { version = "1.0.203", features = ["derive", "default"] }
