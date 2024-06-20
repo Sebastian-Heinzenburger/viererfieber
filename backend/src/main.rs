@@ -4,11 +4,13 @@ use axum::http::StatusCode;
 use axum::response::{Html, IntoResponse, Redirect, Response};
 use axum::routing::{any, get};
 use axum::{Form, Router};
+use axum_server::tls_rustls::RustlsConfig;
 use color_eyre::Result;
 use game_protocol::{GameMessageRequest, LobbyRequest};
 use rand::Rng;
+use tokio::fs;
 use std::{collections::HashMap, sync::Arc};
-use tokio::{net::TcpListener, sync::Mutex};
+use tokio::sync::Mutex;
 use tower_http::services::ServeDir;
 
 use lobby::{Lobby, PlayerTurn, WebScoketMutex};
@@ -204,11 +206,19 @@ async fn main() -> Result<()> {
         .fallback(not_found);
 
     let address = "0.0.0.0:3001";
-    let listener = TcpListener::bind(address).await?;
-    println!(
-        "Started Server on http://{}",
-        listener.local_addr().unwrap()
-    );
-    axum::serve(listener, app).await?;
+    println!("Strarting Server on http://{address}");
+
+    const SSL_PATH_CERT: &str = "/web/.ssl/cert.pem";
+    const SSL_PATH_KEY: &str = "/web/.ssl/key.pem";
+
+    if let Ok(true) = fs::try_exists(SSL_PATH_CERT).await {
+        let tls_config = RustlsConfig::from_pem_file(SSL_PATH_CERT, SSL_PATH_KEY).await?;
+        let listener = std::net::TcpListener::bind(address)?;
+        axum_server::from_tcp_rustls(listener, tls_config);
+    } else {
+        let listener = tokio::net::TcpListener::bind(address).await?;
+        axum::serve(listener, app).await?;
+    }
+
     Ok(())
 }
