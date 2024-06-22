@@ -6,13 +6,9 @@
     margin-top: 1%;
 }
 
-.board_div{
-    width: 50%;
-}
-
 @media (max-width: 768px) {
     .game_and_characters_div {
-        flex-direction: column !important;
+        flex-direction: column;
     }
     .board_div {
         width: 100%;
@@ -22,6 +18,17 @@
     }
     #chip{
         visibility: hidden !important;
+    }
+}
+@media (min-width: 769px) {
+    .game_and_characters_div {
+        flex-direction: row;
+    }
+    .board_div {
+        width: 50%;
+    }
+    .character{
+        font-size: 1em;
     }
 }
 
@@ -58,7 +65,6 @@
 
 .game_and_characters_div{
     display: flex;
-    flex-direction: row;
     justify-content: space-evenly;
 }
 

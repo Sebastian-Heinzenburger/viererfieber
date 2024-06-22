@@ -9,12 +9,17 @@ function nextSound(){
     }
     sound.src = sound_array[sound_index++];
     sound.load();
-    sound.play();
+    sound.play()
+        .catch(error => {
+            console.log("Error playing sound");
+            sound_index = 0;
+            toggleSound(true)
+        });
 }
 
-function toggleSound(){
+function toggleSound(force_pause){
   let line = document.querySelector("#sound_icon line")
-  if(!sound.paused){
+  if(!sound.paused || force_pause){
     line.setAttribute("x1","5.281");
     line.setAttribute("y1","22.032");
     line.setAttribute("x2","22.058");
