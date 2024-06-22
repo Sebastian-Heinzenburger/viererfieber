@@ -11,17 +11,17 @@ use tokio::fs;
 use tower_http::services::ServeDir;
 use tower_sessions::{MemoryStore, Session, SessionManagerLayer};
 
-use crate::connect_four::{IntoLobbycode, LobbyStore, Lobbycode};
+use crate::connect_four::{LobbyStore, Lobbycode};
 
 #[derive(Debug, Default, Clone)]
 struct AppState {
     lobbies: LobbyStore,
 }
 
-async fn socket_handler(socket: WebSocket, state: AppState, code: impl IntoLobbycode) {
+async fn socket_handler(socket: WebSocket, state: AppState, code: Lobbycode) {
     let mut lobbies = state.lobbies.0.lock().await;
-    if let Some(lobby) = lobbies.get_mut(&code.into()) {
-        lobby.connect(socket).unwrap();
+    if let Some(lobby_channel) = lobbies.get_mut(&code.clone()) {
+        let _ = lobby_channel.send((code, socket));
     }
 }
 
@@ -51,11 +51,11 @@ async fn lobby_handler(
     Form(params): Form<LobbyRequestParams>,
 ) -> impl IntoResponse {
     let lobby_code = match params.code {
-        None => state.lobbies.create_lobby().await,
         Some(requested_code) => match state.lobbies.exists_code(Lobbycode(requested_code)).await {
             Some(lobby_code) => lobby_code,
             None => return (StatusCode::NOT_FOUND, "No such lobby").into_response()
-        }
+        },
+        None => state.lobbies.create_lobby().await,
     };
     session
         .insert("lobby_code", &lobby_code)

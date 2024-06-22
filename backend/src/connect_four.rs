@@ -6,32 +6,37 @@ use rand::{seq::SliceRandom, thread_rng, Rng};
 use serde::{Deserialize, Serialize};
 use tokio::{sync::{mpsc::{UnboundedReceiver, UnboundedSender}, Mutex}, time::Duration};
 
-#[derive(Debug)]
-pub struct LobbyExecutor {
-    transfer_lobby_socket: UnboundedSender<(Lobbycode, WebSocket)>,
-    transfer_lobby_socket_rx: UnboundedReceiver<(Lobbycode, WebSocket)>,
-}
-
-
 #[derive(Default, Debug, Clone)]
-pub struct LobbyStore(pub Arc<Mutex<HashMap<Lobbycode, Lobby>>>);
+pub struct LobbyStore(pub Arc<Mutex<HashMap<Lobbycode, UnboundedSender<(Lobbycode, WebSocket)>>>>);
 
 impl LobbyStore {
-
-    pub async fn exists_code(&self, lobby_code: impl IntoLobbycode) -> Option<Lobbycode> {
+    pub async fn exists_code(&self, lobby_code: Lobbycode) -> Option<Lobbycode> {
         let lobbies = self.0.lock().await;
-        let lobby = lobbies.get(&lobby_code.into())?;
-        Some(lobby.code.clone())
+        let _ = lobbies.get(&lobby_code)?;
+        Some(lobby_code)
     }
-
     pub async fn create_lobby(&mut self) -> Lobbycode {
         let lobby_to_insert = Lobby::create();
         let lobby_code = lobby_to_insert.code.clone();
         let mut lobbies = self.0.lock().await;
-        lobbies.insert(lobby_code.clone(), lobby_to_insert);
+        let (tx, mut rx) = tokio::sync::mpsc::unbounded_channel();
+        lobbies.insert(lobby_code.clone(), tx);
+        tokio::task::spawn(async move {
+            // let mut sockets = (None, None);
+            loop{
+                // tokio::select! {
+                //     //rx => todo!(),
+                //     // match sockets {
+                //     //     (None, None) => sockets.0 = Some(socket),
+                //     //     (Some(_), None) => sockets.1 = Some(socket),
+                //     //     (None, Some(_)) => sockets.0 = Some(socket),
+                //     //     (Some(_), Some(_)) => return Err(anyhow!("The lobby is full!")),
+                //     // }
+                // }
+            }
+        });
         lobby_code
     }
-
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone, Eq, PartialEq, Hash)]
